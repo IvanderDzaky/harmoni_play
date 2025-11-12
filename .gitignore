@@ -1,0 +1,21 @@
+# Node modules (jangan upload library)
+backend/node_modules/
+frontend/node_modules/
+
+# Environment files (berisi password, API key, dll.)
+backend/.env
+frontend/.env
+
+# Uploads (file user)
+backend/src/uploads/
+
+# Build files dari frontend (hasil npm run build)
+frontend/dist/
+frontend/build/
+
+# Log files
+*.log
+
+# Mac & VSCode cache
+.DS_Store
+.vscode/
