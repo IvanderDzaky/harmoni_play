@@ -1,21 +1,66 @@
+# ============================================
+# GLOBAL IGNORE
+# ============================================
+
 # Node modules (jangan upload library)
 backend/node_modules/
 frontend/node_modules/
+node_modules/
 
-# Environment files (berisi password, API key, dll.)
+# Environment files — sangat sensitif
 backend/.env
 frontend/.env
-
-# Uploads (file user)
-backend/src/uploads/
-
-# Build files dari frontend (hasil npm run build)
-frontend/dist/
-frontend/build/
+.env
 
 # Log files
 *.log
 
-# Mac & VSCode cache
+# Sistem file cache
 .DS_Store
+Thumbs.db
+
+# VSCode
 .vscode/
+
+# ============================================
+# BACKEND
+# ============================================
+
+# Upload folder (jika ada)
+backend/src/uploads/
+
+# ============================================
+# FRONTEND
+# ============================================
+
+# React build output
+frontend/dist/
+frontend/build/
+
+# React Router cache
+frontend/.react-router/
+
+# Logs
+logs
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+lerna-debug.log*
+
+node_modules
+dist
+dist-ssr
+*.local
+
+# Editor directories and files
+.vscode/*
+!.vscode/extensions.json
+.idea
+.DS_Store
+*.suo
+*.ntvs*
+*.njsproj
+*.sln
+*.sw?
