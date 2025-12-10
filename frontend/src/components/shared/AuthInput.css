@@ -1,0 +1,29 @@
+.auth-input-group {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  margin-bottom: 16px;
+  width: 100%;              /* penting */
+}
+
+.auth-input-group label {
+  color: white;
+  font-size: 14px;
+  font-weight: 600;
+}
+
+.auth-input-group input {
+  width: 100%;              /* WAJIB biar responsif */
+  padding: 12px;
+  border-radius: 4px;
+  border: 1px solid #555;
+  background: #121212;
+  color: white;
+  font-size: 15px;
+  outline: none;
+  box-sizing: border-box;   /* penting agar padding tidak melebihi container */
+}
+
+.auth-input-group input:focus {
+  border-color: white;
+}
