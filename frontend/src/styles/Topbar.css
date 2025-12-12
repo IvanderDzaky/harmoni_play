@@ -1,8 +1,89 @@
+/* ====== TOPBAR WRAPPER ====== */
 .topbar {
   height: 60px;
-  background: #181818;
+  width: 100%;
+  background: #121212;                /* Warna Spotify Dark */
+  border-bottom: 1px solid #2a2a2a;   /* Garis tipis */
   display: flex;
   align-items: center;
+  justify-content: space-between;
   padding: 0 20px;
-  border-bottom: 1px solid #333;
+  position: sticky;
+  top: 0;
+  z-index: 10;
+}
+
+/* ====== LEFT SECTION (Back & Forward) ====== */
+.topbar-left {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.nav-btn {
+  width: 34px;
+  height: 34px;
+  border-radius: 50%;
+  border: none;
+  background: #181818;
+  color: white;
+  font-size: 18px;
+  cursor: pointer;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  transition: background 0.2s;
+}
+
+.nav-btn:hover {
+  background: #2b2b2b;
+}
+
+/* ====== RIGHT SECTION ====== */
+.topbar-right {
+  display: flex;
+  align-items: center;
+  gap: 15px;
+}
+
+/* ====== SEARCH BOX ====== */
+.topbar-search {
+  background: #2a2a2a;
+  border: none;
+  outline: none;
+  padding: 8px 14px;
+  width: 240px;
+
+  border-radius: 20px;
+  color: white;
+  font-size: 14px;
+
+  transition: background 0.2s;
+}
+
+.topbar-search:focus {
+  background: #3a3a3a;
+}
+
+/* ====== PROFILE ICON ====== */
+.topbar-profile {
+  width: 34px;
+  height: 34px;
+  background: #535353;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  color: white;
+  font-weight: 600;
+  cursor: pointer;
+
+  transition: background 0.2s;
+}
+
+.topbar-profile:hover {
+  background: #6a6a6a;
 }
