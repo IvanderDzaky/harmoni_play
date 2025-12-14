@@ -16,21 +16,24 @@ export default function Login() {
     e.preventDefault();
     setLoading(true);
     setSuccess(false);
+    setError("");
 
     try {
       const res = await loginUser({ email, password });
-      console.log("Login success:", res.data);
 
-      // Animasi succes
+      // 🔑 SIMPAN TOKEN
+      localStorage.setItem("token", res.data.token);
+
       setSuccess(true);
 
-      // Delay sebelum redirect (1 detik)
       setTimeout(() => {
         window.location.href = "/dashboard";
       }, 1000);
 
     } catch (err) {
-      console.error("Login failed:", err.response?.data);
+      const msg =
+        err.response?.data?.message || "Login gagal";
+      setError(msg);
     } finally {
       setLoading(false);
     }
