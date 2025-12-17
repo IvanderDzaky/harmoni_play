@@ -3,9 +3,10 @@ import AuthInput from "../components/shared/AuthInput";
 import AuthButton from "../components/shared/AuthButton";
 import { loginUser } from "../services/authService";
 import "../styles/Auth.css";
-import { Link } from "react-router-dom";
+import { useNavigate, Link } from "react-router-dom";
 
 export default function Login() {
+  const navigate = useNavigate();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
@@ -27,7 +28,7 @@ export default function Login() {
       setSuccess(true);
 
       setTimeout(() => {
-        window.location.href = "/dashboard";
+        navigate("/dashboard");
       }, 1000);
 
     } catch (err) {
