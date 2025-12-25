@@ -1,14 +1,26 @@
 import React from "react";
 import { useNavigate } from "react-router-dom";
-import "../../styles/Topbar.css";
+import {useState} from "react";
+import "../../styles/Topbar.css"
 
 export default function Topbar() {
   const navigate = useNavigate();
+  const [name,setName] = useState("")
 
   const handleLogout = () => {
     localStorage.removeItem("token");
     navigate("/login");
   };
+
+  const handleInput = (e) => {
+    
+    if(e.key === "Enter") {
+      e.preventDefault()
+      navigate(`/searchlist?q=${encodeURIComponent(name)}`)
+    }
+    if(!name || !name.trim()) return 
+
+  }
 
   return (
     <div className="topbar">
@@ -22,6 +34,8 @@ export default function Topbar() {
           type="text"
           placeholder="Search…"
           className="topbar-search"
+          onChange={(e) => {setName(e.target.value)}}
+          onKeyDown={handleInput}
         />
 
         {/* PROFILE → LOGOUT */}
