@@ -4,7 +4,7 @@ import Login from "./pages/Login";
 import Register from "./pages/Register";
 import Dashboard from "./pages/Dashboard";
 import Search from "./pages/Search";
-
+import SearchList from "./pages/SearchList";
 import ProtectedRoute from "./routes/ProtectedRoute";
 import PublicRoute from "./routes/PublicRoute";
 
@@ -42,7 +42,7 @@ function App() {
           </ProtectedRoute>
         }
       />
-
+      
       <Route
         path="/search"
         element={
@@ -51,6 +51,13 @@ function App() {
           </ProtectedRoute>
         }
       />
+
+      <Route path="/searchlist" element={
+        <ProtectedRoute>
+          <SearchList />
+        </ProtectedRoute>
+        } />
+
     </Routes>
   );
 }

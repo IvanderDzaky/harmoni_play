@@ -1,18 +1,61 @@
 import DashboardLayout from "../components/layout/DashboardLayout";
 import "../styles/Search.css";
-import { useState } from "react";
+import { useState,useEffect} from "react";
+import { getAllCategories } from "../services/genresService";
+import Loader from "../components/layout/Loader";
+import "../styles/loader.css"
+import { useNavigate } from "react-router-dom";
+import SearchBar from "../components/SearchBar";
 
 export default function Search() {
+  const navigate = useNavigate()
   const [query, setQuery] = useState("");
+  const [genres,setGenres] = useState([])
+  const [loading,setLoading] = useState(true)
 
-  const categories = [
-    { id: 1, label: "Pop", color: "#f39c12" },
-    { id: 2, label: "Rock", color: "#e74c3c" },
-    { id: 3, label: "Jazz", color: "#8e44ad" },
-    { id: 4, label: "Classical", color: "#3498db" },
-    { id: 5, label: "Hip Hop", color: "#27ae60" },
-    { id: 6, label: "Electronic", color: "#d35400" }
+  useEffect(() => {
+      const fetchAllCategories = async () => {
+
+        try{
+          const data = await getAllCategories()
+          setGenres(data)
+        }catch (error) {
+          console.log(error)
+        }finally{
+          setLoading(false)
+        }
+      }
+
+      fetchAllCategories()
+  },[])
+  
+  if(loading) {
+    return (
+      <DashboardLayout>
+        <div className="loader-overlay">
+          <Loader />
+        </div>
+      </DashboardLayout>
+    )
+  }
+  
+  
+  const Color = [
+    "#f39c12" ,
+    "#e74c3c" ,
+    "#8e44ad" ,
+    "#3498db" ,
+    "#27ae60",
+    "#d35400"
   ];
+  
+  const handleSearch = (e) => {
+  e.preventDefault()
+  if (!query || !query.trim()) return;
+
+
+  navigate(`/searchlist?q=${encodeURIComponent(query)}`)
+}
 
   return (
     <DashboardLayout>
@@ -20,26 +63,20 @@ export default function Search() {
         <h2 className="search-title">Search</h2>
 
         {/* SEARCH BAR */}
-        <div className="search-bar-container">
-          <input
-            type="text"
-            placeholder="What do you want to listen to?"
-            className="search-input"
-            value={query}
-            onChange={(e) => setQuery(e.target.value)}
-          />
-        </div>
+        <SearchBar handleSearch={handleSearch} query={query} setQuery={setQuery}/>
 
         {/* CATEGORY GRID */}
         <h3 className="section-title">Browse All</h3>
         <div className="search-grid">
-          {categories.map((cat) => (
+          {genres?.map((genre,index) => (
             <div
-              key={cat.id}
+              key={genre.genre_id}
               className="search-card"
-              style={{ backgroundColor: cat.color }}
-            >
-              <p>{cat.label}</p>
+             style={{
+                 backgroundColor: Color[index % Color.length]
+                  }}
+               >
+              <p>{genre.name}</p>
             </div>
           ))}
         </div>

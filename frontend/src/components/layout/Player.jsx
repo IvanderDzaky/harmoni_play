@@ -78,7 +78,12 @@ export default function Player() {
 
       {/* LEFT — song info */}
       <div className="player-left">
-        <img src={currentSong.cover} alt="" className="player-cover" />
+        <img src={
+        currentSong?.cover_image?.startsWith("http")
+        ? currentSong.cover_image
+        : "/default-cover.png"
+        } 
+        alt="" className="player-cover" />
         <div>
           <h4>{currentSong.title}</h4>
           <p>{currentSong.artist}</p>

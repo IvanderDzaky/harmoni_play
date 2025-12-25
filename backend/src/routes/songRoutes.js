@@ -5,10 +5,12 @@ import {
   getSongById,
   updateSong,
   deleteSong,
+  getSongsByName
 } from "../controllers/songController.js";
 
 const router = express.Router();
 
+router.get("/search", getSongsByName);
 // CRUD
 router.post("/", createSong);
 router.get("/", getAllSongs);

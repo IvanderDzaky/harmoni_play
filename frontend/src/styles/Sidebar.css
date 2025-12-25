@@ -9,6 +9,12 @@
   gap: 30px;
 }
 
+.sidebar-header {
+  justify-content: space-between;
+  align-items: center;
+  display:flex;
+}
+
 .sidebar-title {
   font-size: 22px;
   font-weight: 700;

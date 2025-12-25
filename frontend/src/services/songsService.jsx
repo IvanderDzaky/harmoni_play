@@ -1,0 +1,31 @@
+const BASE_URL = "http://localhost:5000/api/songs"
+
+export const getAllSongs = async () => {
+    try{
+        const response = await fetch(BASE_URL)
+        if(!response.ok) {
+            throw new Error("Tidak bisa fetching data")
+        }
+        const songs = await response.json()
+        return songs
+    }catch (error) {
+        console.log(error)
+        return []
+    }
+}
+
+export const getSongsByName = async  (q) => {
+    try{
+        const response = await fetch(`${BASE_URL}/search?q=${q}`)
+        if(!response.ok) {
+            throw new Error("Tidak bisa fetching data")
+        }
+        const songs = await response.json()
+        return songs
+    }catch (error) {
+        console.log(error)
+        return []
+    }
+
+
+}

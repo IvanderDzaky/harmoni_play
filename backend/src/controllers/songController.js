@@ -1,4 +1,5 @@
 import Song from "../models/Song.js";
+import { Sequelize,Op } from "sequelize";
 
 export const createSong = async (req, res) => {
   try {
@@ -93,4 +94,22 @@ export const deleteSong = async (req, res) => {
   } catch (error) {
     res.status(500).json({ error: error.message });
   }
+};
+
+
+export const getSongsByName = async (req, res) => {
+  const q = req.query.q?.trim().toLowerCase();
+
+  if (!q) return res.json([]);
+
+  const songs = await Song.findAll({
+    where: Sequelize.where(
+      Sequelize.fn("LOWER", Sequelize.col("title")),
+      {
+        [Op.like]: `%${q}%`
+      }
+    )
+  });
+
+  res.json(songs);
 };
