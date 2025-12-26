@@ -22,11 +22,19 @@ export default function Topbar() {
 
   }
 
+  const goBack = () => {
+    navigate(-1); 
+  };
+
+  const goForward = () => {
+    navigate(1); 
+  };
+
   return (
     <div className="topbar">
       <div className="topbar-left">
-        <button className="nav-btn">⟨</button>
-        <button className="nav-btn">⟩</button>
+        <button className="nav-btn" onClick={goBack}>⟨</button>
+        <button className="nav-btn" onClick={goForward}>⟩</button>
       </div>
 
       <div className="topbar-right">
