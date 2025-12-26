@@ -1,20 +1,28 @@
 import Sidebar from "./Sidebar";
 import Topbar from "./Topbar";
 import Player from "./Player";
-import "../../styles/Dashboard.css";
 
-export default function DashboardLayout({ children }) {
+export default function DashboardLayout({
+  children,
+  currentSong,
+  onNext,
+  onPrev
+}) {
   return (
     <div className="dashboard-container">
-  <Sidebar />
+      <Sidebar />
 
-  <div className="dashboard-main">
-    <Topbar />
-    <div className="dashboard-content">{children}</div>
+      <div className="dashboard-main">
+        <Topbar />
+        <div className="dashboard-content">{children}</div>
 
-    <Player />   {/* Player masuk ke area main */}
-  </div>
-</div>
-
+        <Player
+          song={currentSong}
+          onNext={onNext}
+          onPrev={onPrev}
+        />
+      </div>
+    </div>
   );
 }
+

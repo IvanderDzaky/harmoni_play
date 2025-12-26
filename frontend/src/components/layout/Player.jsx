@@ -1,109 +1,76 @@
 import { useRef, useState, useEffect } from "react";
 import "../../styles/Player.css";
 
-export default function Player() {
+export default function Player({ song, onNext, onPrev }) {
   const audioRef = useRef(null);
-
-  // Sample playlist
-  // Nanti dari backend
-  const playlist = [
-    {
-      id: 1,
-      title: "Midnight Drive",
-      artist: "Luxe Beats",
-      cover: "https://i.scdn.co/image/ab67616d0000b273e73e9377a1c75f1ef5e3f6b0",
-      src: "https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3"
-    },
-    {
-      id: 2,
-      title: "Dreamscape",
-      artist: "Synthwave",
-      cover: "https://i.scdn.co/image/ab67616d0000b273c60211472edbba7d6851124c",
-      src: "https://www.soundhelix.com/examples/mp3/SoundHelix-Song-2.mp3"
-    }
-  ];
-
-  const [currentIndex, setCurrentIndex] = useState(0);
   const [isPlaying, setIsPlaying] = useState(false);
   const [progress, setProgress] = useState(0);
 
-  const currentSong = playlist[currentIndex];
-
   useEffect(() => {
-    if (isPlaying) audioRef.current.play();
-  }, [currentIndex]);
+    if (song && audioRef.current) {
+      audioRef.current.load();
+      audioRef.current.play();
+      setIsPlaying(true);
+    }
+  }, [song]);
+
+  if (!song) return null;
 
   const togglePlay = () => {
-    if (isPlaying) {
-      audioRef.current.pause();
-    } else {
-      audioRef.current.play();
-    }
+    if (isPlaying) audioRef.current.pause();
+    else audioRef.current.play();
     setIsPlaying(!isPlaying);
   };
 
   const handleTimeUpdate = () => {
     const percent =
       (audioRef.current.currentTime / audioRef.current.duration) * 100;
-    setProgress(percent);
-  };
-
-  const handleSeek = (e) => {
-    const rect = e.target.getBoundingClientRect();
-    const seekTime =
-      ((e.clientX - rect.left) / rect.width) * audioRef.current.duration;
-    audioRef.current.currentTime = seekTime;
-  };
-
-  const nextSong = () => {
-    setCurrentIndex((currentIndex + 1) % playlist.length);
-    setIsPlaying(true);
-  };
-
-  const prevSong = () => {
-    setCurrentIndex(
-      currentIndex === 0 ? playlist.length - 1 : currentIndex - 1
-    );
-    setIsPlaying(true);
+    setProgress(percent || 0);
   };
 
   return (
     <div className="player-container">
       <audio
         ref={audioRef}
-        src={currentSong.src}
+        src={song.file_audio}
         onTimeUpdate={handleTimeUpdate}
-        onEnded={nextSong}
+        onEnded={onNext}
       />
 
-      {/* LEFT — song info */}
+      {/* LEFT */}
       <div className="player-left">
-        <img src={
-        currentSong?.cover_image?.startsWith("http")
-        ? currentSong.cover_image
-        : "/default-cover.png"
-        } 
-        alt="" className="player-cover" />
-        <div>
-          <h4>{currentSong.title}</h4>
-          <p>{currentSong.artist}</p>
+        <img
+          src={song.cover_image}
+          alt={song.title}
+          className="player-cover"
+        />
+        <div className="player-meta">
+          <h4 className="player-title">{song.title}</h4>
+          <p className="player-artist">
+            {song.artist_name || "Unknown Artist"}
+          </p>
         </div>
       </div>
 
-      {/* CENTER — controls */}
+      {/* CENTER */}
       <div className="player-center">
         <div className="player-controls">
-          <button onClick={prevSong}>⏮</button>
-          <button onClick={togglePlay}>{isPlaying ? "⏸" : "▶️"}</button>
-          <button onClick={nextSong}>⏭</button>
+          <button onClick={onPrev}>⏮</button>
+          <button onClick={togglePlay}>
+            {isPlaying ? "⏸" : "▶️"}
+          </button>
+          <button onClick={onNext}>⏭</button>
         </div>
 
-        <div className="player-progress" onClick={handleSeek}>
-          <div className="player-progress-fill" style={{ width: `${progress}%` }} />
+        <div className="player-progress">
+          <div
+            className="player-progress-fill"
+            style={{ width: `${progress}%` }}
+          />
         </div>
       </div>
 
-      {/* RIGHT — volume */}
+      {/* RIGHT */}
       <div className="player-right">
         <input
           type="range"

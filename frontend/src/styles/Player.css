@@ -1,29 +1,27 @@
+/* ===============================
+   PLAYER CONTAINER
+================================ */
 .player-container {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  z-index: 100;
+
+  width: 100%;
   height: 90px;
-  background: #121212;
+  padding: 0 20px;
+
+  background-color: #121212;
   border-top: 1px solid #2c2c2c;
 
   display: flex;
   align-items: center;
   justify-content: space-between;
-
-  padding: 0 20px;
-
-  width: 100%;
-  position: fixed;  
-  left: 0;
-  bottom: 0;         
-  z-index: 100;      
 }
 
-@media (max-width: 768px) {
-  .player-container {
-    left: 0;
-    width: 100%;
-  }
-}
-
-/* LEFT SIDE */
+/* ===============================
+   LEFT — SONG INFO
+================================ */
 .player-left {
   width: 25%;
   display: flex;
@@ -38,37 +36,57 @@
   object-fit: cover;
 }
 
-.player-left h4 {
+.player-meta {
+  display: flex;
+  flex-direction: column;
+}
+
+.player-title {
   margin: 0;
   font-size: 15px;
-  color: #fff;
+  color: #ffffff;
 }
 
-.player-left p {
+.player-artist {
   margin: 0;
   font-size: 13px;
-  color: #aaa;
+  color: #aaaaaa;
 }
 
-/* CENTER */
+/* ===============================
+   CENTER — CONTROLS & PROGRESS
+================================ */
 .player-center {
   width: 50%;
   display: flex;
   flex-direction: column;
   align-items: center;
+  gap: 8px;
+}
+
+.player-play-btn {
+  background: none;
+  border: none;
+  font-size: 22px;
+  color: #ffffff;
+  cursor: pointer;
+}
+
+.player-play-btn:hover {
+  color: #1db954;
 }
 
 .player-controls {
   display: flex;
   gap: 16px;
-  margin-bottom: 8px;
+  margin-bottom: 6px;
 }
 
 .player-controls button {
   background: none;
   border: none;
   font-size: 20px;
-  color: white;
+  color: #ffffff;
   cursor: pointer;
 }
 
@@ -80,25 +98,47 @@
 .player-progress {
   width: 100%;
   height: 5px;
-  background: #333;
+  background-color: #333333;
   border-radius: 3px;
-  cursor: pointer;
   overflow: hidden;
+  cursor: pointer;
 }
 
 .player-progress-fill {
   height: 100%;
-  background: #1db954;
   width: 0%;
+  background-color: #1db954;
+  transition: width 0.2s linear;
 }
 
-/* RIGHT — Volume */
+/* ===============================
+   RIGHT — VOLUME
+================================ */
 .player-right {
   width: 25%;
   display: flex;
   justify-content: flex-end;
+  align-items: center;
 }
 
 .player-right input[type="range"] {
   width: 120px;
+  cursor: pointer;
+}
+
+/* ===============================
+   RESPONSIVE
+================================ */
+@media (max-width: 768px) {
+  .player-left {
+    width: 35%;
+  }
+
+  .player-center {
+    width: 65%;
+  }
+
+  .player-right {
+    display: none;
+  }
 }
