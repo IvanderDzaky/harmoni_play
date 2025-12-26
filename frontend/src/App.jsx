@@ -9,7 +9,7 @@ import ProtectedRoute from "./routes/ProtectedRoute";
 import PublicRoute from "./routes/PublicRoute";
 import PlaylistDetail from "./components/layout/PlaylistDetail";
 import Genre from "./pages/Genre";
-
+import SongDetail from "./pages/SongDetail";
 function App() {
   return (
     <Routes>
@@ -69,6 +69,12 @@ function App() {
         <Route path="/genre/:id" element={
           <ProtectedRoute>
             <Genre />
+          </ProtectedRoute>
+        } />
+
+        <Route path="/song/:id" element={
+          <ProtectedRoute>
+            <SongDetail />
           </ProtectedRoute>
         } />
        </Routes>

@@ -14,6 +14,18 @@ export const getAllSongs = async () => {
     }
 }
 
+export const getSongById = async (id) => {
+    try{
+        const response = await fetch(`${BASE_URL}/${id}`)
+
+        if(!response.ok) return null
+
+        return await response.json()
+    }catch(err) {
+        console.log(err)
+        return null
+    }
+}
 export const getSongsByName = async  (q) => {
     try{
         const response = await fetch(`${BASE_URL}/search?q=${encodeURIComponent(q)}`)

@@ -1,25 +1,22 @@
+
 import "../styles/Dashboard.css";
-
-const SongSection = ({ songs, titleSection, onPlay }) => {
-  return (
-    <div>
-      <h2>{titleSection}</h2>
-
-      <div className="song-grid">
-        {songs.map((song, index) => (
-          <div
+import SongCard from "./layout/SongCard";
+const SongSection = ({songs,titleSection,onPlay}) => {
+    return (
+        <div className="dashboard-content">
+        <h2 className="section-title">{titleSection}</h2>
+        <div className="song-grid">
+        {songs?.map((song, index) => (
+          <SongCard
             key={song.song_id}
-            className="song-card"
-            onClick={() => onPlay(index)}
-          >
-            <img src={song.cover_image} className="song-cover" />
-            <h3>{song.title}</h3>
-          </div>
+            song={song}
+            index={index}
+            onPlay={onPlay}
+          />
         ))}
       </div>
-    </div>
-  );
-};
+        </div>
+    )
+}
 
 export default SongSection;
-
