@@ -32,8 +32,8 @@ export const createSong = async (req, res) => {
     if (coverError) throw coverError;
 
     // Dapatkan URL public
-    const audioUrl = supabase.storage.from("songs").getPublicUrl(audioData.path).data.publicUrl;
-    const coverUrl = supabase.storage.from("songs").getPublicUrl(coverData.path).data.publicUrl;
+    const audioUrl = supabase.storage.from("Songs").getPublicUrl(audioData.path).data.publicUrl;
+    const coverUrl = supabase.storage.from("Songs").getPublicUrl(coverData.path).data.publicUrl;
 
     // Simpan ke database
     const song = await Song.create({
