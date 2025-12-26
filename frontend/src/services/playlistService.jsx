@@ -1,0 +1,47 @@
+const BASE_URL = "http://localhost:5000/api/playlists";
+
+const getAuthHeader = () => {
+  const token = localStorage.getItem("token");
+  return {
+    Authorization: `Bearer ${token}`,
+  };
+};
+
+export const getAllPlayListByUser = async () => {
+  try {
+    const response = await fetch(`${BASE_URL}/user/me`, {
+      headers: {
+        ...getAuthHeader(),
+      },
+    });
+
+    if (!response.ok) throw new Error("Gagal fetch playlist");
+
+    return await response.json();
+  } catch (err) {
+    console.error(err);
+    return [];
+  }
+};
+
+export const addPlaylist = async ({ name, description }) => {
+  try {
+    const response = await fetch(BASE_URL, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        ...getAuthHeader(),
+      },
+      body: JSON.stringify({ name, description }),
+    });
+
+    if (!response.ok) throw new Error("Gagal tambah playlist");
+
+    const result = await response.json();
+    return result.data; 
+  } catch (err) {
+    console.error(err);
+    return null;
+  }
+};
+

@@ -2,17 +2,26 @@ import Playlist from "../models/Playlist.js";
 
 export const createPlaylist = async (req, res) => {
   try {
-    const { name, description, created_by } = req.body;
-    const playlist = await Playlist.create({ name, description, created_by });
+    console.log("USER:", req.user); 
+
+    const { name, description } = req.body;
+
+    const playlist = await Playlist.create({
+      name,
+      description,
+      created_by: req.user.user_id,
+    });
 
     res.status(201).json({
       message: "Playlist created successfully",
       data: playlist,
     });
   } catch (error) {
+    console.error(error);
     res.status(500).json({ error: error.message });
   }
 };
+
 
 export const getAllPlaylists = async (req, res) => {
   try {
@@ -68,3 +77,16 @@ export const deletePlaylist = async (req, res) => {
     res.status(500).json({ error: error.message });
   }
 };
+
+export const getPlaylistsByUserId = async (req, res) => {
+  try {
+    const playlists = await Playlist.findAll({
+      where: { created_by: req.user.user_id },
+    });
+
+    res.json(playlists);
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+};
+

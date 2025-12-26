@@ -24,7 +24,10 @@ export default function Login() {
 
       // 🔑 SIMPAN TOKEN
       localStorage.setItem("token", res.data.token);
+      localStorage.setItem("user",JSON.stringify(res.data.data))
+      console.log("USER LS:", JSON.parse(localStorage.getItem("user")));
 
+       
       setSuccess(true);
 
       setTimeout(() => {

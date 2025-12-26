@@ -8,7 +8,7 @@ const SongSection = ({songs,titleSection}) => {
 
         <div className="song-grid">
           {songs?.map((song) => (
-            <div key={song.id} className="song-card">
+            <div key={song.song_id} className="song-card">
               <img
                 src={song.cover_image}
                 alt={song.title}
@@ -17,7 +17,6 @@ const SongSection = ({songs,titleSection}) => {
 
               <div className="song-info">
                 <h3 className="song-title">{song.title}</h3>
-                <p className="song-artist">{song.artist}</p>
               </div>
             </div>
           ))}

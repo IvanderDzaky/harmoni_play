@@ -1,14 +1,15 @@
 import { useState } from "react";
-import "../styles/EditPlaylistModal.css"
+import "../styles/EditPlaylistModal.css";
 
 export default function EditPlaylistModal({ onClose, onSave }) {
   const [name, setName] = useState("");
+  const [description, setDescription] = useState("");
 
   const handleSubmit = (e) => {
     e.preventDefault();
     if (!name.trim()) return;
 
-    onSave({ name });
+    onSave({ name, description });
   };
 
   return (
@@ -22,6 +23,13 @@ export default function EditPlaylistModal({ onClose, onSave }) {
             placeholder="My Playlist"
             value={name}
             onChange={(e) => setName(e.target.value)}
+          />
+
+          <textarea
+            placeholder="Description (optional)"
+            value={description}
+            onChange={(e) => setDescription(e.target.value)}
+            rows={3}
           />
 
           <div className="modal-actions">

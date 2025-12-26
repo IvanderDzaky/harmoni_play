@@ -47,3 +47,55 @@
 .menu-icon {
   font-size: 20px;
 }
+
+.playlist-section {
+  margin-top: 16px;
+  padding: 0 12px;
+}
+
+.playlist-item {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 8px;
+  border-radius: 6px;
+  color: #b3b3b3;
+  text-decoration: none;
+  transition: background 0.2s;
+}
+
+.playlist-item:hover {
+  background: #1f1f1f;
+  color: #fff;
+}
+
+.playlist-icon {
+  width: 36px;
+  height: 36px;
+  background: #2a2a2a;
+  border-radius: 4px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.playlist-info {
+  display: flex;
+  flex-direction: column;
+}
+
+.playlist-name {
+  font-size: 14px;
+  font-weight: 500;
+}
+
+.playlist-meta {
+  font-size: 12px;
+  color: #a7a7a7;
+}
+
+.empty-playlist {
+  color: #777;
+  font-size: 13px;
+  padding: 8px;
+}

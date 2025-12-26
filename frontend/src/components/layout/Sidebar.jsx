@@ -1,11 +1,58 @@
 import { Link } from "react-router-dom";
 import { FiHome, FiSearch, FiBook,FiPlus } from "react-icons/fi";
-import {useState} from "react";
+import {useState,useEffect} from "react";
 import "../../styles/Sidebar.css";
+import {addPlaylist} from "../../services/playlistService"
 import EditPlaylistModal from "../EditPlaylistModal";
+import { getAllPlayListByUser } from "../../services/playlistService";
+
 export default function Sidebar() {
    const [showEditModal, setShowEditModal] = useState(false);
+   const [playlist,setPlaylist] = useState([])
+   const [loading,setLoading] = useState(true)
+      
+  useEffect(() => {
+  const fetchPlaylist = async () => {
+    try {
+      const data = await getAllPlayListByUser();
+      setPlaylist(data);
+    } catch (err) {
+      console.log(err);
+    } finally {
+      setLoading(false);
+    }
+  };
 
+  fetchPlaylist();
+}, []);
+
+  
+ const handleCreatePlaylist = async ({ name, description }) => {
+  try {
+    const response = await addPlaylist({ name, description });
+
+    if (response) {
+      setPlaylist((prev) => [...prev, response]);
+      setShowEditModal(false);
+    }
+  } catch (err) {
+    console.log(err);
+  }
+};
+
+
+  if(loading) {
+    return (
+      <div style={{
+        display:"flex",
+        justifyContent:"Center",
+        alignItems:"center",
+        height:"100vh"
+      }}>
+        Memuat playlist....
+      </div>
+    )
+  }
   return (
     <div className="sidebar">
 
@@ -38,13 +85,36 @@ export default function Sidebar() {
             </button>
          </div>
         </nav>
+        <div className="playlist-section">
+            {playlist.length === 0 ? (
+              <p className="empty-playlist">Belum ada playlist</p>
+            ) : (
+              playlist.map((item) => (
+                <Link
+                  key={item.playlist_id}
+                  to={`/playlist/${item.playlist_id}`}
+                  className="playlist-item"
+                >
+                  <div className="playlist-icon">
+                    <FiBook size={20} />
+                  </div>
+
+                  <div className="playlist-info">
+                    <span className="playlist-name">{item.name}</span>
+                    <span className="playlist-meta">
+                      Playlist • {item.created_by}
+                    </span>
+                  </div>
+                </Link>
+              ))
+            )}
+          </div>
+
         {showEditModal && (
           <EditPlaylistModal
             onClose={() => setShowEditModal(false)}
-            onSave={() => {
-              // nanti connect backend
-              setShowEditModal(false);
-            }}
+            onSave=
+              {handleCreatePlaylist}
           />
         )}
     </div>
