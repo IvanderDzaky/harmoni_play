@@ -1,6 +1,6 @@
 import Song from "../models/Song.js";
 import { supabase } from "../config/supabase.js";
-
+import {Op, Sequelize } from "sequelize";
 // CREATE SONG
 export const createSong = async (req, res) => {
   try {
@@ -77,48 +77,61 @@ export const getSongById = async (req, res) => {
   }
 };
 
-// GET SONGS BY NAME
-export const getSongsByName = async (req, res) => {
-  try {
-    const { title } = req.query;
-    const songs = await Song.findAll({
-      where: {
-        title: {
-          [Op.iLike]: `%${title}%`
-        }
-    }
-  });
-    res.json(songs);
-  } catch (error) {
-    res.status(500).json({ error: error.message });
-  }
-};
-
-// UPDATE SONG
 export const updateSong = async (req, res) => {
   try {
     const { id } = req.params;
     const updateData = req.body;
+
     const song = await Song.findByPk(id);
-    if (!song) return res.status(404).json({ message: "Song not found" });
+    if (!song) {
+      return res.status(404).json({ message: "Song not found" });
+    }
 
     await song.update(updateData);
-    res.json({ message: "Song updated successfully", data: song });
+
+    res.json({
+      message: "Song updated successfully",
+      data: song,
+    });
   } catch (error) {
     res.status(500).json({ error: error.message });
   }
 };
 
-// DELETE SONG
 export const deleteSong = async (req, res) => {
   try {
     const { id } = req.params;
+
     const song = await Song.findByPk(id);
-    if (!song) return res.status(404).json({ message: "Song not found" });
+    if (!song) {
+      return res.status(404).json({ message: "Song not found" });
+    }
 
     await song.destroy();
+
     res.json({ message: "Song deleted successfully" });
   } catch (error) {
     res.status(500).json({ error: error.message });
   }
+};
+
+
+
+export const getSongsByName = async (req, res) => {
+  const q = req.query.q?.trim().toLowerCase();
+
+  if (!q) return res.json([]);
+  
+  console.log("Searching songs for:", q);
+
+  const songs = await Song.findAll({
+    where: Sequelize.where(
+      Sequelize.fn("LOWER", Sequelize.col("title")),
+      {
+        [Op.like]: `%${q}%`
+      }
+    )
+  });
+
+  res.json(songs);
 };

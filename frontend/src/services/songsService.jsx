@@ -16,7 +16,7 @@ export const getAllSongs = async () => {
 
 export const getSongsByName = async  (q) => {
     try{
-        const response = await fetch(`${BASE_URL}/search?q=${q}`)
+        const response = await fetch(`${BASE_URL}/search?q=${encodeURIComponent(q)}`)
         if(!response.ok) {
             throw new Error("Tidak bisa fetching data")
         }
