@@ -1,71 +1,115 @@
+/* ===== SIDEBAR ===== */
 .sidebar {
+  width: 250px;
+  height: 100vh;
+  background-color: #000;
+  color: #fff;
+  padding: 20px 16px;
+  display: flex;
+  flex-direction: column;
+}
+
+/* ===== LOADING ===== */
+.sidebar-loading {
   width: 250px;
   height: 100vh;
   background: #000;
   color: #fff;
-  padding: 24px 20px;
   display: flex;
-  flex-direction: column;
-  gap: 30px;
+  justify-content: center;
+  align-items: center;
 }
 
+/* ===== HEADER ===== */
 .sidebar-header {
+  display: flex;
   justify-content: space-between;
   align-items: center;
-  display:flex;
+  margin-bottom: 24px;
 }
 
 .sidebar-title {
-  font-size: 22px;
+  font-size: 20px;
   font-weight: 700;
-  margin-bottom: 10px;
 }
 
+/* ===== MENU ===== */
 .sidebar-menu {
   display: flex;
   flex-direction: column;
-  gap: 16px;
+  gap: 12px;
 }
 
 .menu-item {
   display: flex;
   align-items: center;
-  gap: 16px;
-  padding: 10px 10px;
+  gap: 14px;
+  padding: 8px 12px;
   text-decoration: none;
   color: #b3b3b3;
-  border-radius: 6px;
-  transition: 0.2s ease;
-  font-size: 16px;
+  border-radius: 4px;
+  font-size: 15px;
+  font-weight: 600;
+  transition: background 0.2s ease, color 0.2s ease;
 }
 
 .menu-item:hover {
-  background: #1a1a1a;
-  color: white;
+  background-color: #1a1a1a;
+  color: #fff;
 }
 
-.menu-icon {
-  font-size: 20px;
+.icon-only {
+  padding: 8px;
 }
 
+/* ===== LIBRARY ROW ===== */
+.library-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.add-playlist-btn {
+  background: none;
+  border: none;
+  color: #b3b3b3;
+  cursor: pointer;
+  padding: 8px;
+}
+
+.add-playlist-btn:hover {
+  color: #fff;
+}
+
+/* ===== PLAYLIST ===== */
 .playlist-section {
-  margin-top: 16px;
-  padding: 0 12px;
+  margin-top: 20px;
+  padding: 0 6px;
+  flex: 1;
+  overflow-y: auto;
+}
+
+.playlist-section::-webkit-scrollbar {
+  width: 6px;
+}
+
+.playlist-section::-webkit-scrollbar-thumb {
+  background: #333;
+  border-radius: 3px;
 }
 
 .playlist-item {
   display: flex;
   align-items: center;
   gap: 12px;
-  padding: 8px;
-  border-radius: 6px;
+  padding: 6px 8px;
+  border-radius: 4px;
   color: #b3b3b3;
   text-decoration: none;
-  transition: background 0.2s;
+  transition: color 0.2s ease;
 }
 
 .playlist-item:hover {
-  background: #1f1f1f;
   color: #fff;
 }
 
@@ -82,11 +126,15 @@
 .playlist-info {
   display: flex;
   flex-direction: column;
+  overflow: hidden;
 }
 
 .playlist-name {
   font-size: 14px;
   font-weight: 500;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 
 .playlist-meta {

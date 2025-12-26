@@ -1,73 +1,67 @@
-import React from 'react';
-import styled from 'styled-components';
+import React from "react";
+import styled from "styled-components";
 
 const Loader = () => {
   return (
-    <StyledWrapper>
+    <Wrapper>
       <div className="loader">
         <span />
         <span />
         <span />
-        <span />
-        <span />
-        <span />
       </div>
-    </StyledWrapper>
+      <p>Loading...</p>
+    </Wrapper>
   );
-}
+};
 
-const StyledWrapper = styled.div`
+const Wrapper = styled.div`
+  width: 100%;
+  height: 100%;
+  min-height: 70vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  background: #121212; /* Spotify dark */
+  color: #b3b3b3;
+
+  p {
+    margin-top: 16px;
+    font-size: 14px;
+    letter-spacing: 0.5px;
+  }
+
   .loader {
-    --color: #a5a5b0;
-    --size: 70px;
-    width: var(--size);
-    height: var(--size);
-    display: grid;
-    grid-template-columns: repeat(3, 1fr);
-    gap: 5px;
-  }
- 
-  .loader span {
-    width: 100%;
-    height: 100%;
-    background-color: var(--color);
-    animation: keyframes-blink 0.6s alternate infinite linear;
+    display: flex;
+    gap: 8px;
   }
 
-  .loader span:nth-child(1) {
-    animation-delay: 0ms;
+  .loader span {
+    width: 10px;
+    height: 10px;
+    background: #1db954; /* Spotify green */
+    border-radius: 50%;
+    animation: bounce 0.6s infinite alternate;
   }
 
   .loader span:nth-child(2) {
-    animation-delay: 200ms;
+    animation-delay: 0.2s;
   }
 
   .loader span:nth-child(3) {
-    animation-delay: 300ms;
+    animation-delay: 0.4s;
   }
 
-  .loader span:nth-child(4) {
-    animation-delay: 400ms;
-  }
-
-  .loader span:nth-child(5) {
-    animation-delay: 500ms;
-  }
-
-  .loader span:nth-child(6) {
-    animation-delay: 600ms;
-  }
-
-  @keyframes keyframes-blink {
-    0% {
-      opacity: 0.3;
-      transform: scale(0.5) rotate(5deg);
+  @keyframes bounce {
+    from {
+      transform: translateY(0);
+      opacity: 0.6;
     }
-
-    50% {
+    to {
+      transform: translateY(-10px);
       opacity: 1;
-      transform: scale(1);
     }
-  }`;
+  }
+`;
 
 export default Loader;
