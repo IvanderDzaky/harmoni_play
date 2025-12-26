@@ -92,7 +92,7 @@ export default function Sidebar() {
               playlist.map((item) => (
                 <Link
                   key={item.playlist_id}
-                  to={`/playlist/${item.playlist_id}`}
+                  to={`/playlist/${item.playlist_id}?name=${encodeURIComponent(item.name)}&description=${encodeURIComponent(item.description)}`}
                   className="playlist-item"
                 >
                   <div className="playlist-icon">
