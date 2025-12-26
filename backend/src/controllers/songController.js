@@ -135,3 +135,28 @@ export const getSongsByName = async (req, res) => {
 
   res.json(songs);
 };
+
+export const getSongsByCategoryId = async (req,res) => {
+    const {id} = req.params
+
+    try{
+      const songs = await Song.findAll({
+        where: {
+          genre_id : id
+        }
+      })
+
+      if(songs.length === 0){
+        return res.status(404).json({
+          message:"songs not found"
+        })
+      }
+
+      res.json(songs)
+    }catch (err) {
+      console.log(err)
+      res.status(500).json({
+        error : err.message
+      })
+    }
+}

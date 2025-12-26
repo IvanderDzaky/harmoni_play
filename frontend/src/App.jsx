@@ -8,7 +8,7 @@ import SearchList from "./pages/SearchList";
 import ProtectedRoute from "./routes/ProtectedRoute";
 import PublicRoute from "./routes/PublicRoute";
 import PlaylistDetail from "./components/layout/PlaylistDetail";
-
+import Genre from "./pages/Genre";
 
 function App() {
   return (
@@ -64,6 +64,12 @@ function App() {
         <ProtectedRoute>
           <PlaylistDetail />
         </ProtectedRoute>
+        } />
+
+        <Route path="/genre/:id" element={
+          <ProtectedRoute>
+            <Genre />
+          </ProtectedRoute>
         } />
        </Routes>
   );

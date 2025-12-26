@@ -75,6 +75,7 @@ export default function Search() {
              style={{
                  backgroundColor: Color[index % Color.length]
                   }}
+                  onClick={() => navigate(`/genre/${genre.genre_id}`)}
                >
               <p>{genre.name}</p>
             </div>

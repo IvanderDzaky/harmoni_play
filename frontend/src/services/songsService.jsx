@@ -29,3 +29,17 @@ export const getSongsByName = async  (q) => {
 
 
 }
+
+export const getSongsByCategoryId = async (id) => {
+    try{
+        if(!id) return []
+
+        const response = await fetch(`${BASE_URL}/category/${id}`)
+        if (!response.ok) return []
+        
+        return await response.json()
+    }catch (err) {
+        console.log(err)
+        return []
+    }
+}
