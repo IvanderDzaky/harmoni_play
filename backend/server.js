@@ -15,6 +15,7 @@ import subscriptionRoutes from "./src/routes/subscriptionRoutes.js";
 import artistRoutes from "./src/routes/artistRoutes.js";
 import genreRoutes from "./src/routes/genreRoutes.js";
 import albumRoutes from "./src/routes/albumRoutes.js";
+import "./src/models/index.js";
 
 dotenv.config();
 
@@ -30,6 +31,7 @@ app.get("/", (req, res) => {
 // Jalankan server
 const PORT = process.env.PORT || 5000;
 app.listen(PORT, () => console.log(`🚀 Server running on port ${PORT}`));
+
 
 // mounting routes
 app.use("/api/users", userRoutes);

@@ -1,4 +1,10 @@
-import PlaylistSong from "../models/PlaylistSong.js";
+import {
+  PlaylistSong,
+  Song,
+  Artist,
+  Album,
+} from "../models/index.js";
+
 
 export const addSongToPlaylist = async (req, res) => {
   try {
@@ -19,18 +25,45 @@ export const addSongToPlaylist = async (req, res) => {
 };
 
 export const getSongsInPlaylist = async (req, res) => {
-  try {
-    const playlist_id = req.params.playlist_id;
+  const { playlist_id } = req.params;
 
-    const songs = await PlaylistSong.findAll({
+  try {
+    const data = await PlaylistSong.findAll({
       where: { playlist_id },
+      include: [
+        {
+          model: Song,
+          as: "Song", // pastikan sama persis dengan as di index.js
+          attributes: ["song_id", "title", "cover_image"],
+          include: [
+            { model: Artist, as: "Artist", attributes: ["name"] },
+            { model: Album, as: "Album", attributes: ["title"] },
+          ],
+        },
+      ],
     });
 
-    res.json(songs);
-  } catch (error) {
-    res.status(500).json({ error: error.message });
+    console.log("Data fetched:", data); // 🔥 cek di console server
+
+    const result = data.map(item => ({
+      song_id: item.Song.song_id,
+      title: item.Song.title,
+      cover_image: item.Song.cover_image,
+      artist: item.Song.Artist?.name || "-",
+      album: item.Song.Album?.title || "-",
+      duration: "-",
+    }));
+
+    res.json(result);
+  } catch (err) {
+    console.error("Sequelize error:", err); // 🔥 log error asli
+    res.status(500).json({ message: err.message }); // tampilkan error asli
   }
 };
+
+
+
+
 
 export const removeSongFromPlaylist = async (req, res) => {
   try {

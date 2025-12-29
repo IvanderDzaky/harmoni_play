@@ -1,30 +1,36 @@
-import React from "react";
-import {useEffect,useState} from "react";
-import { getAllPlaylistSongs } from "../../services/playlistSongService";
+import { useEffect, useState } from "react";
 import { useParams, useSearchParams } from "react-router-dom";
-import DashboardLayout from "./DashboardLayout";
-import Loader from "./Loader";
-import "../../styles/loader.css"
-import "../../styles/playlist.css"
+import DashboardLayout from "../layout/DashboardLayout";
+import Loader from "../layout/Loader";
 
+import { getAllPlaylistSongs } from "../../services/playlistSongService";
+
+import "../../styles/playlist.css";
+import "../../styles/loader.css";
 
 export default function PlaylistDetail() {
-  const {id} = useParams();
-  const [searchParams] = useSearchParams()
+  const { id } = useParams();
+  const [searchParams] = useSearchParams();
 
-  const name = searchParams.get("name")
-  const description = searchParams.get("description")
+  const name = searchParams.get("name");
+  const description = searchParams.get("description") || "";
 
-  const [playlistsongs, setPlaylistSongs] = useState([]);
+  const [songs, setSongs] = useState([]);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-  const fetchPlaylistSongs = async () => {
-    const data = await getAllPlaylistSongs({ id });
-    setPlaylistSongs(data || []); // aman, kalau fetch gagal tetap array
-    setLoading(false);
-  };
-  fetchPlaylistSongs();
+    const fetchSongs = async () => {
+      try {
+        const data = await getAllPlaylistSongs(id);
+        setSongs(data);
+      } catch (err) {
+        console.error(err);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchSongs();
   }, [id]);
 
   if (loading) {
@@ -36,64 +42,64 @@ export default function PlaylistDetail() {
       </DashboardLayout>
     );
   }
-  if (!playlistsongs) return <div>Error loading playlist</div>;
+
   return (
     <DashboardLayout>
       <div className="playlist-page">
         <div className="playlist-content">
           <div className="playlist-cover">
-            <img src="images/playlist-cover.png" alt="" />
+            <img src="/images/playlist-cover.png" alt="" />
           </div>
+
           <div className="playlist-info">
             <div className="playlist-public">PUBLIC PLAYLIST</div>
-            <div className="playlist-title">{name || "Playlist Title"}</div>
-            <div className="playlist-description">{description || "Playlist description"}</div>
-            <div style={{ height: "10px" }}></div>
+            <div className="playlist-title">{name}</div>
+            <div className="playlist-description">{description}</div>
             <div className="playlist-stats">
-              <img src="/default-cover.png" width="24px" height="24px" alt="" />
-              <span> Spotify ·</span>
-              <span>{playlistsongs.length} songs · </span>
+              <span>{songs.length} songs</span>
             </div>
           </div>
         </div>
 
-        <div className="playlist-songs-container">
-          {/* Buttons tetap sama */}
-          <div className="playlist-songs">
-            <table>
-              <thead>
-                <tr>
-                  <th>#</th>
-                  <th>Title</th>
-                  <th>Album</th>
-                  <th>Date Added</th>
-                  <th>
-                    <img src="assets/Duration.svg" alt="" />
-                  </th>
-                </tr>
-              </thead>
-              <tbody>
-                {playlistsongs?.map((song, index) => (
-                  <tr key={song.id || index}>
-                    <td>{index + 1}</td>
-                    <td className="song-title">
-                      <div className="song-image">
-                        <img src={song.cover || "images/song-cover.jpeg"} alt="" />
-                      </div>
-                      <div className="song-name-album">
-                        <div className="song-name">{song.title}</div>
-                        <div className="song-artist">{song.artist}</div>
-                      </div>
-                    </td>
-                    <td className="song-album">{song.album}</td>
-                    <td className="song-date-added">{song.dateAdded}</td>
-                    <td className="song-duration">{song.duration}</td>
-                  </tr>
-                ))}
-              </tbody>
-            </table>
-          </div>
-        </div>
+        <table className="playlist-table">
+          <thead>
+            <tr>
+              <th>#</th>
+              <th>Title</th>
+              <th>Album</th>
+              <th>Date Added</th>
+              <th>Duration</th>
+            </tr>
+          </thead>
+
+          <tbody>
+            {songs.map((song, index) => (
+              <tr key={song.song_id}>
+                <td>{index + 1}</td>
+
+                <td className="song-title">
+                  <img
+                    src={song.cover_image || "/default-cover.png"}
+                    alt=""
+                    className="song-cover"
+                  />
+                  <div>
+                    <div className="song-name">{song.title}</div>
+                    <div className="song-artist">{song.artist}</div>
+                  </div>
+                </td>
+
+                <td>{song.album}</td>
+
+                <td>
+                  {new Date(song.dateAdded).toLocaleDateString("id-ID")}
+                </td>
+
+                <td>{song.duration}</td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
       </div>
     </DashboardLayout>
   );
