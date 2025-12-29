@@ -1,73 +1,71 @@
-import { useRef, useState, useEffect } from "react";
+import { useState, useEffect } from "react";
+import { usePlayer } from "../../contexts/PlayerContext";
 import "../../styles/Player.css";
 
-export default function Player({ song, onNext, onPrev }) {
-  const audioRef = useRef(null);
-  const [isPlaying, setIsPlaying] = useState(false);
+export default function Player() {
+  const {
+    audioRef,
+    currentSong,
+    isPlaying,
+    togglePlay,
+    nextSong,
+    prevSong,
+  } = usePlayer();
+
   const [progress, setProgress] = useState(0);
+  const [volume, setVolume] = useState(1);
 
-  useEffect(() => {
-    if (song && audioRef.current) {
-      audioRef.current.load();
-      audioRef.current.play();
-      setIsPlaying(true);
-    }
-  }, [song]);
+  if (!currentSong) return null;
 
-  if (!song) return null;
-
-  const togglePlay = () => {
-    if (isPlaying) audioRef.current.pause();
-    else audioRef.current.play();
-    setIsPlaying(!isPlaying);
+  /* ================= PROGRESS ================= */
+  const handleTimeUpdate = () => {
+    if (!audioRef.current?.duration) return;
+    const percent = (audioRef.current.currentTime / audioRef.current.duration) * 100;
+    setProgress(percent);
   };
 
-  const handleTimeUpdate = () => {
-    const percent =
-      (audioRef.current.currentTime / audioRef.current.duration) * 100;
-    setProgress(percent || 0);
+  const handleSeek = (e) => {
+    if (!audioRef.current?.duration) return;
+    const value = Number(e.target.value);
+    audioRef.current.currentTime = (value / 100) * audioRef.current.duration;
+    setProgress(value);
+  };
+
+  /* ================= VOLUME ================= */
+  const handleVolume = (e) => {
+    const value = Number(e.target.value);
+    setVolume(value);
+    if (audioRef.current) audioRef.current.volume = value;
   };
 
   return (
     <div className="player-container">
-      <audio
-        ref={audioRef}
-        src={song.file_audio}
-        onTimeUpdate={handleTimeUpdate}
-        onEnded={onNext}
-      />
+      <audio ref={audioRef} onTimeUpdate={handleTimeUpdate} onEnded={nextSong} />
 
       {/* LEFT */}
       <div className="player-left">
-        <img
-          src={song.cover_image}
-          alt={song.title}
-          className="player-cover"
-        />
-        <div className="player-meta">
-          <h4 className="player-title">{song.title}</h4>
-          <p className="player-artist">
-            {song.artist_name || "Unknown Artist"}
-          </p>
+        <img src={currentSong.cover_image} alt={currentSong.title} className="player-cover" />
+        <div className="player-info">
+          <h4>{currentSong.title}</h4>
+          <p>{currentSong.artist_name || "Unknown Artist"}</p>
         </div>
       </div>
 
       {/* CENTER */}
       <div className="player-center">
         <div className="player-controls">
-          <button onClick={onPrev}>⏮</button>
-          <button onClick={togglePlay}>
-            {isPlaying ? "⏸" : "▶️"}
-          </button>
-          <button onClick={onNext}>⏭</button>
+          <button onClick={prevSong}>⏮</button>
+          <button onClick={togglePlay}>{isPlaying ? "⏸" : "▶️"}</button>
+          <button onClick={nextSong}>⏭</button>
         </div>
-
-        <div className="player-progress">
-          <div
-            className="player-progress-fill"
-            style={{ width: `${progress}%` }}
-          />
-        </div>
+        <input
+          type="range"
+          min="0"
+          max="100"
+          value={progress}
+          onChange={handleSeek}
+          className="player-progress"
+        />
       </div>
 
       {/* RIGHT */}
@@ -77,7 +75,8 @@ export default function Player({ song, onNext, onPrev }) {
           min="0"
           max="1"
           step="0.01"
-          onChange={(e) => (audioRef.current.volume = e.target.value)}
+          value={volume}
+          onChange={handleVolume}
         />
       </div>
     </div>

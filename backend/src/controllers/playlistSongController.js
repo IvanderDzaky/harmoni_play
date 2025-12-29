@@ -51,6 +51,7 @@ export const getSongsInPlaylist = async (req, res) => {
       cover_image: item.Song.cover_image,
       artist: item.Song.Artist?.name || "-",
       album: item.Song.Album?.title || "-",
+      added_at: item.added_at,
       duration: "-",
     }));
 
