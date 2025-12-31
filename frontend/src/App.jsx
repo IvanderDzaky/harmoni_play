@@ -39,20 +39,17 @@ function App() {
           }
         />
 
-        {/* PROTECTED + LAYOUT */}
-        <Route
-          element={
-            <ProtectedRoute>
-              <DashboardLayout />
-            </ProtectedRoute>
-          }
-        >
-          <Route path="/dashboard" element={<Dashboard />} />
-          <Route path="/search" element={<Search />} />
-          <Route path="/searchlist" element={<SearchList />} />
-          <Route path="/playlist/:id" element={<PlaylistDetail />} />
-          <Route path="/genre/:id" element={<Genre />} />
-          <Route path="/song/:id" element={<SongDetail />} />
+        {/* PROTECTED */}
+        <Route element={<ProtectedRoute />}>
+          {/* LAYOUT */}
+          <Route element={<DashboardLayout />}>
+            <Route path="/dashboard" element={<Dashboard />} />
+            <Route path="/search" element={<Search />} />
+            <Route path="/searchlist" element={<SearchList />} />
+            <Route path="/playlist/:id" element={<PlaylistDetail />} />
+            <Route path="/genre/:id" element={<Genre />} />
+            <Route path="/song/:id" element={<SongDetail />} />
+          </Route>
         </Route>
       </Routes>
     </PlayerProvider>

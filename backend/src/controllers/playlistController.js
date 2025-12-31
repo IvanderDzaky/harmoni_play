@@ -90,3 +90,25 @@ export const getPlaylistsByUserId = async (req, res) => {
   }
 };
 
+export const getUserPlaylistsContainingSong = async (req, res) => {
+  try {
+    const { songId } = req.params;
+
+    const playlists = await Playlist.findAll({
+      where: {
+        created_by: req.user.user_id,
+      },
+      include: [
+        {
+          model: PlaylistSong,
+          where: { song_id: songId },
+          attributes: [],
+        },
+      ],
+    });
+
+    res.json(playlists);
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+};

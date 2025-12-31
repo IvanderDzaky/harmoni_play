@@ -1,6 +1,5 @@
 import express from "express";
 import { authenticateToken } from "../middleware/authMiddleware.js";
-
 import {
   createPlaylist,
   getAllPlaylists,
@@ -13,19 +12,14 @@ import {
 
 const router = express.Router();
 
-router.get(
-  "/user/me",
-  authenticateToken,
-  getPlaylistsByUserId,
-  getUserPlaylistsContainingSong
-);
-
 router.post("/", authenticateToken, createPlaylist);
+
+router.get("/user/me", authenticateToken, getPlaylistsByUserId);
+router.get("/song/:songId", authenticateToken, getUserPlaylistsContainingSong);
 
 router.get("/", getAllPlaylists);
 router.get("/:id", getPlaylistById);
 router.put("/:id", updatePlaylist);
 router.delete("/:id", deletePlaylist);
-router.get("/song/:songId", authenticateToken, getUserPlaylistsContainingSong)
 
 export default router;
