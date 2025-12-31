@@ -6,6 +6,17 @@ import "../styles/loader.css";
 import { useNavigate } from "react-router-dom";
 import SearchBar from "../components/SearchBar";
 
+
+  const Color = [
+    "#f39c12",
+    "#e74c3c",
+    "#8e44ad",
+    "#3498db",
+    "#27ae60",
+    "#d35400",
+  ];
+
+  
 export default function Search() {
   const navigate = useNavigate();
   const [query, setQuery] = useState("");
@@ -34,15 +45,6 @@ export default function Search() {
       </div>
     );
   }
-
-  const Color = [
-    "#f39c12",
-    "#e74c3c",
-    "#8e44ad",
-    "#3498db",
-    "#27ae60",
-    "#d35400",
-  ];
 
   const handleSearch = (e) => {
     e.preventDefault();

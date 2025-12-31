@@ -32,15 +32,13 @@ const Genre = () => {
 
     if(loading) {
         return (
-            <DashboardLayout>
+            
                 <div className="loader-overlay">
                     <Loader />
                 </div>
-            </DashboardLayout>
         )
     }
     return  (
-        <DashboardLayout>
         <div className="genres-page">
 
             {songs && songs.length > 0 ? (
@@ -54,7 +52,6 @@ const Genre = () => {
             )
             }
         </div>
-        </DashboardLayout>
     )
 }
 

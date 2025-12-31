@@ -7,7 +7,8 @@ import {
   getPlaylistById,
   updatePlaylist,
   deletePlaylist,
-  getPlaylistsByUserId
+  getPlaylistsByUserId,
+  getUserPlaylistsContainingSong
 } from "../controllers/playlistController.js";
 
 const router = express.Router();
@@ -15,7 +16,8 @@ const router = express.Router();
 router.get(
   "/user/me",
   authenticateToken,
-  getPlaylistsByUserId
+  getPlaylistsByUserId,
+  getUserPlaylistsContainingSong
 );
 
 router.post("/", authenticateToken, createPlaylist);
@@ -24,6 +26,6 @@ router.get("/", getAllPlaylists);
 router.get("/:id", getPlaylistById);
 router.put("/:id", updatePlaylist);
 router.delete("/:id", deletePlaylist);
-
+router.get("/song/:songId", authenticateToken, getUserPlaylistsContainingSong)
 
 export default router;
