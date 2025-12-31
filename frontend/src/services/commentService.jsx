@@ -20,25 +20,27 @@ export const getAllComments = async () => {
     }
 }
 
-export const createComments = async (song_id,user_id,content) => {
-     try{
-        const response = await fetch(BASE_URL,{
-            method: "POST",
-            headers: {
-                ...getAuthHeader(),
-                "Content-type" : "Application/json"
-            },
-            body: JSON.stringify({
-                song_id,
-                user_id,
-                content
-            })
-        });
-        if(!response.ok) return null
+export const createComments = async (song_id, user_id, content) => {
+  try {
+    const response = await fetch(BASE_URL, {
+      method: "POST",
+      headers: {
+        ...getAuthHeader(),
+        "Content-Type": "application/json", // huruf C besar
+      },
+      body: JSON.stringify({
+        song_id,
+        user_id,
+        content
+      }),
+    });
 
-        return await response.json()
-     }catch(err) {
-        console.log(err)
-        return []
-     }
-}
+    if (!response.ok) return null;
+
+    const result = await response.json();
+    return result.data; // <-- ambil data komentar saja
+  } catch (err) {
+    console.error(err);
+    return null;
+  }
+};

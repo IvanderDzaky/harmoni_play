@@ -5,7 +5,8 @@ import PlaylistModal from "../components/layout/PlaylistModal";
 
 import { getSongById } from "../services/songsService";
 import { getAllPlayListByUser } from "../services/playlistService";
-import { addSongToPlaylist, getPlaylistsContainingSong } from "../services/playlistSongService";
+import { addSongToPlaylist} from "../services/playlistSongService";
+import { getPlaylistsContainingSong } from "../services/playlistService";
 import { createComments, getAllComments } from "../services/commentService";
 import { usePlayer } from "../contexts/PlayerContext";
 
@@ -66,28 +67,29 @@ export default function SongDetail() {
   }, [id]);
 
   // Tambah komentar
-  const handleAddComment = async () => {
-    if (commentText.trim() === "") return;
+ const handleAddComment = async () => {
+  if (commentText.trim() === "") return;
 
-    const user = JSON.parse(localStorage.getItem("user"));
-    if (!user) {
-      alert("User tidak ditemukan. Silakan login ulang.");
-      return;
-    }
+  const user = JSON.parse(localStorage.getItem("user"));
+  if (!user) {
+    alert("User tidak ditemukan. Silakan login ulang.");
+    return;
+  }
 
-    try {
-      const newComment = await createComments(id, user.user_id, commentText);
-      if (newComment) {
-        setComments(prev => [...prev, newComment]);
-        setCommentText("");
-      } else {
-        alert("Gagal menambahkan komentar");
-      }
-    } catch (err) {
-      console.error(err);
-      alert("Terjadi error saat menambahkan komentar");
+  try {
+    const newComment = await createComments(id, user.user_id, commentText);
+    if (newComment) {
+      setComments(prev => [...prev, newComment]); // newComment = object { comment_id, song_id, content, ... }
+      setCommentText("");
+    } else {
+      alert("Gagal menambahkan komentar");
     }
-  };
+  } catch (err) {
+    console.error(err);
+    alert("Terjadi error saat menambahkan komentar");
+  }
+};
+
 
   const openModal = () => setShowModal(true);
   const closeModal = () => setShowModal(false);
@@ -154,9 +156,11 @@ export default function SongDetail() {
               />
               <button onClick={handleAddComment}>Send</button>
             </div>
-            <div className="comments-list">
-              {comments.length === 0 ? <p>No comments yet.</p> : comments.map((c, i) => <p key={i}>{c.content || c}</p>)}
-            </div>
+           <div className="comments-list">
+            {comments.length === 0 
+              ? <p>No comments yet.</p> 
+              : comments.map((c, i) => <p key={i}>{c.content}</p>)}
+          </div>
           </div>
         )}
       </div>

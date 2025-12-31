@@ -40,3 +40,22 @@ export const addPlaylist = async ({ name, description }) => {
     return null;
   }
 };
+
+export const getPlaylistsContainingSong = async (song_id) => {
+  try {
+    const response = await fetch(
+      `${BASE_URL}/song/${song_id}`, // <--- hapus /user
+      {
+        headers: getAuthHeader(),
+      }
+    );
+
+    if (!response.ok) throw new Error("Gagal fetch playlist lagu");
+
+    const data = await response.json();
+    return Array.isArray(data) ? data : [];
+  } catch (err) {
+    console.error(err);
+    return [];
+  }
+};
