@@ -1,5 +1,6 @@
-import {useNavigate} from "react-router-dom"
-import "../../styles/Dashboard.css"
+import { useNavigate } from "react-router-dom";
+import "../../styles/Dashboard.css";
+
 const SongCard = ({ song, index, onPlay }) => {
   const navigate = useNavigate();
 
@@ -14,12 +15,22 @@ const SongCard = ({ song, index, onPlay }) => {
   return (
     <div
       className="song-card"
-      onClick={handleClick}         
-      onDoubleClick={handleDoubleClick} 
+      onClick={handleClick}
+      onDoubleClick={handleDoubleClick}
     >
-      <img src={song.cover_image} alt={song.title} className="song-cover" />
+      <div className="song-cover-wrapper">
+        <img
+          src={song.cover_image}
+          alt={song.title}
+          className="song-cover"
+        />
+      </div>
+
       <div className="song-info">
         <h3 className="song-title">{song.title}</h3>
+        {song.artist_name && (
+          <p className="song-artist">{song.artist_name}</p>
+        )}
       </div>
     </div>
   );

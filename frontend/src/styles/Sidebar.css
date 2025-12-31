@@ -1,149 +1,136 @@
-/* ===== SIDEBAR ===== */
+/* ================= SIDEBAR ================= */
 .sidebar {
-  width: 250px;
-  height: 100vh;
-  background-color: #000;
-  color: #fff;
-  padding: 20px 16px;
-  display: flex;
-  flex-direction: column;
-}
-
-/* ===== LOADING ===== */
-.sidebar-loading {
-  width: 250px;
+  width: 260px;
   height: 100vh;
   background: #000;
   color: #fff;
+  padding: 20px 14px;
+  display: flex;
+  flex-direction: column;
+  overflow-y: auto;
+}
+
+/* ================= LOADING ================= */
+.sidebar-loading {
+  width: 100%;
+  height: 100%;
   display: flex;
   justify-content: center;
   align-items: center;
+  font-size: 14px;
+  color: #b3b3b3;
 }
 
-/* ===== HEADER ===== */
+/* ================= HEADER ================= */
 .sidebar-header {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
   margin-bottom: 24px;
 }
 
 .sidebar-title {
-  font-size: 20px;
-  font-weight: 700;
+  font-size: 22px;
+  font-weight: 800;
+  letter-spacing: 0.4px;
 }
 
-/* ===== MENU ===== */
+/* ================= MENU / PLAYLIST ================= */
 .sidebar-menu {
   display: flex;
   flex-direction: column;
-  gap: 12px;
+  gap: 6px;
 }
 
+/* ITEM BERSAMA (Menu + Playlist) */
 .menu-item {
   display: flex;
   align-items: center;
-  gap: 14px;
-  padding: 8px 12px;
+  gap: 10px;        /* jarak icon & teks */
+  padding: 8px 0;   /* vertical saja, tidak ada padding horizontal */
   text-decoration: none;
   color: #b3b3b3;
-  border-radius: 4px;
+  border-radius: 6px;
   font-size: 15px;
   font-weight: 600;
   transition: background 0.2s ease, color 0.2s ease;
 }
 
 .menu-item:hover {
-  background-color: #1a1a1a;
+  background: #1a1a1a;
   color: #fff;
 }
 
-.icon-only {
-  padding: 8px;
-}
-
-/* ===== LIBRARY ROW ===== */
-.library-row {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-}
-
-.add-playlist-btn {
-  background: none;
-  border: none;
-  color: #b3b3b3;
-  cursor: pointer;
-  padding: 8px;
-}
-
-.add-playlist-btn:hover {
-  color: #fff;
-}
-
-/* ===== PLAYLIST ===== */
-.playlist-section {
-  margin-top: 20px;
-  padding: 0 6px;
-  flex: 1;
-  overflow-y: auto;
-}
-
-.playlist-section::-webkit-scrollbar {
-  width: 6px;
-}
-
-.playlist-section::-webkit-scrollbar-thumb {
-  background: #333;
-  border-radius: 3px;
-}
-
-.playlist-item {
-  display: flex;
-  align-items: center;
-  gap: 12px;
-  padding: 6px 8px;
-  border-radius: 4px;
-  color: #b3b3b3;
-  text-decoration: none;
-  transition: color 0.2s ease;
-}
-
-.playlist-item:hover {
-  color: #fff;
-}
-
-.playlist-icon {
-  width: 36px;
-  height: 36px;
+/* ICON FIXED WIDTH */
+.menu-icon {
+  width: 32px;
+  min-width: 32px;   /* penting supaya semua teks start di posisi sama */
+  height: 32px;
   background: #2a2a2a;
-  border-radius: 4px;
+  border-radius: 6px;
   display: flex;
   align-items: center;
   justify-content: center;
+  flex-shrink: 0;
 }
 
-.playlist-info {
+/* TEKS */
+.menu-text {
+  flex: 1;  /* span mengambil sisa space supaya start di posisi sama */
+}
+
+/* ================= LIBRARY ROW ================= */
+.library-row {
+  display: flex;
+  align-items: center;
+  gap: 6px;           /* jarak library + tombol + */
+  margin-bottom: 12px; /* jarak ke playlist */
+}
+
+.library-link {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+/* BUTTON ADD PLAYLIST */
+.add-playlist-btn {
+  background: none;
+  border: none;
+  cursor: pointer;
+  color: #b3b3b3;
+  padding: 6px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: background 0.2s ease, color 0.2s ease;
+}
+
+.add-playlist-btn:hover {
+  background: #1a1a1a;
+  color: #fff;
+}
+
+/* ================= PLAYLIST SECTION ================= */
+.playlist-section {
   display: flex;
   flex-direction: column;
-  overflow: hidden;
+  gap: 6px;
 }
 
-.playlist-name {
-  font-size: 14px;
-  font-weight: 500;
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
-}
-
-.playlist-meta {
-  font-size: 12px;
-  color: #a7a7a7;
-}
-
+/* ================= EMPTY ================= */
 .empty-playlist {
   color: #777;
   font-size: 13px;
-  padding: 8px;
+  padding-left: 42px; /* sejajar dengan teks menu */
+}
+
+/* ================= ACTIVE STATE ================= */
+.menu-item.active {
+  background: #1f1f1f;
+  color: #fff;
+}
+
+.menu-item.active .menu-icon {
+  background: #1db954;
+  color: #000;
 }
