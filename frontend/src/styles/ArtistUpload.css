@@ -1,35 +1,69 @@
-.artist-upload-page {
-  max-width: 600px;
-  margin: 40px auto;
-  padding: 20px;
-  background: #1e1e1e;
-  color: #f0f0f0;
-  border-radius: 12px;
-  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.4);
-  font-family: sans-serif;
+/* ============================ */
+/* Modal Overlay & Content      */
+/* ============================ */
+
+.modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(30, 30, 30, 0.85);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 999;
 }
 
-h2 {
+.modal-content {
+  width: 100%;
+  max-width: 500px;
+  background: #1e1e1e;
+  padding: 25px;
+  border-radius: 12px;
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.5);
+  position: relative;
+  color: #f0f0f0;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+.modal-content h3 {
   text-align: center;
   margin-bottom: 20px;
+  font-size: 24px;
+  font-weight: 600;
+  color: #f0f0f0;
 }
 
-.message {
+.modal-content .message {
   text-align: center;
   color: #ffd700;
   margin-bottom: 15px;
+  font-weight: 500;
 }
 
+/* ============================ */
+/* Form Inputs                  */
+/* ============================ */
+
 .upload-form input[type="text"],
-.upload-form textarea,
-.upload-form select {
+.upload-form textarea {
   width: 100%;
-  padding: 10px;
+  padding: 12px;
   margin-bottom: 15px;
   background: #2a2a2a;
-  border: 1px solid #444;
+  border: 1px solid #555;
   border-radius: 8px;
   color: #f0f0f0;
+  font-size: 15px;
+  transition: border 0.2s, box-shadow 0.2s;
+}
+
+.upload-form input[type="text"]:focus,
+.upload-form textarea:focus {
+  border-color: #4caf50;
+  box-shadow: 0 0 8px rgba(76, 175, 80, 0.5);
+  outline: none;
 }
 
 .upload-form textarea {
@@ -39,61 +73,82 @@ h2 {
 
 .upload-form label {
   display: block;
-  margin-bottom: 5px;
-  font-weight: bold;
+  margin-bottom: 6px;
+  font-weight: 600;
+  color: #ccc;
 }
 
-button[type="submit"] {
-  width: 100%;
-  padding: 12px;
-  background: #4caf50;
-  color: white;
-  font-weight: bold;
-  border: none;
-  border-radius: 8px;
-  cursor: pointer;
-  transition: all 0.3s ease;
-}
+/* ============================ */
+/* Modal Buttons                */
+/* ============================ */
 
-button[type="submit"]:hover {
-  background: #45a049;
-}
-
-button:disabled {
-  background: #777;
-  cursor: not-allowed;
-}
-
-.preview-audio {
-  width: 100%;
-  margin-bottom: 15px;
-}
-
-.preview-cover-large {
-  display: block;
-  max-width: 200px;
-  margin: 0 auto 20px;
-  border-radius: 12px;
-  border: 2px solid #444;
-}
-
-/* Drag & Drop Cover */
-.cover-drop-zone {
-  height: 120px;
-  border: 2px dashed #777;
-  border-radius: 12px;
+.modal-buttons {
   display: flex;
-  align-items: center;
-  justify-content: center;
-  color: #bbb;
-  margin-bottom: 15px;
-  cursor: pointer;
-  transition: all 0.3s ease;
-  text-align: center;
+  gap: 12px;
+  margin-top: 10px;
 }
 
-.cover-drop-zone:hover {
-  border-color: #4caf50;
-  color: #4caf50;
-  background: #2a2a2a;
+.modal-buttons button {
+  flex: 1;
+  padding: 12px;
+  font-weight: bold;
+  border-radius: 8px;
+  border: none;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.modal-buttons button[type="submit"] {
+  background: linear-gradient(135deg, #4caf50, #81c784);
+  color: white;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.4);
+}
+
+.modal-buttons button[type="submit"]:hover {
+  background: linear-gradient(135deg, #43a047, #66bb6a);
+  box-shadow: 0 6px 16px rgba(0, 0, 0, 0.5);
+}
+
+.modal-buttons button[type="button"] {
+  background: #555;
+  color: #f0f0f0;
+}
+
+.modal-buttons button:disabled {
+  background: #444;
+  cursor: not-allowed;
+  box-shadow: none;
+}
+
+/* ============================ */
+/* Loader Overlay inside modal  */
+/* ============================ */
+
+.modal-content .loader-overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(30, 30, 30, 0.75);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border-radius: 12px;
+  z-index: 10;
+}
+
+/* ============================ */
+/* Responsive                   */
+/* ============================ */
+
+@media (max-width: 480px) {
+  .modal-content {
+    padding: 20px;
+  }
+
+  .modal-buttons button {
+    padding: 10px;
+    font-size: 14px;
+  }
 }

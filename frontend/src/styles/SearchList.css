@@ -1,3 +1,7 @@
+/* ============================ */
+/* Search List Page Styling      */
+/* ============================ */
+
 .searchlist-page {
   padding: 24px;
 }
@@ -12,45 +16,68 @@
   color: white;
   font-size: 22px;
   margin-bottom: 16px;
+  font-weight: 600;
 }
 
-/* TOP RESULT */
+/* ============================ */
+/* Top Result Card              */
+/* ============================ */
+
 .top-result-card {
   background: #242424;
   padding: 20px;
-  border-radius: 10px;
+  border-radius: 12px;
   position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  transition: transform 0.2s, box-shadow 0.2s;
+}
+
+.top-result-card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.5);
 }
 
 .top-result-card img {
-  width: 120px;
-  border-radius: 8px;
+  width: 140px;
+  height: 140px;
+  border-radius: 12px;
+  object-fit: cover;
   margin-bottom: 16px;
 }
 
 .top-result-card h2 {
   color: white;
   margin: 8px 0;
-}
-
-.top-result-card p {
-  color: #b3b3b3;
+  font-size: 20px;
 }
 
 .play-btn {
   position: absolute;
-  bottom: 20px;
-  right: 20px;
+  bottom: 16px;
+  right: 16px;
   background: #1db954;
   border: none;
-  width: 48px;
-  height: 48px;
+  width: 50px;
+  height: 50px;
   border-radius: 50%;
-  font-size: 18px;
+  font-size: 20px;
+  font-weight: bold;
   cursor: pointer;
+  transition: transform 0.2s, box-shadow 0.2s;
 }
 
-/* SONG LIST */
+.play-btn:hover {
+  transform: scale(1.1);
+  box-shadow: 0 4px 12px rgba(29, 185, 84, 0.6);
+}
+
+/* ============================ */
+/* Song List Styling            */
+/* ============================ */
+
 .song-list {
   display: flex;
   flex-direction: column;
@@ -59,10 +86,11 @@
 
 .song-item {
   display: flex;
-  justify-content: space-between;
   align-items: center;
-  padding: 8px;
-  border-radius: 6px;
+  padding: 10px;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: background 0.2s;
 }
 
 .song-item:hover {
@@ -71,18 +99,25 @@
 
 .song-info {
   display: flex;
-  gap: 12px;
   align-items: center;
+  gap: 12px;
 }
 
 .song-info img {
-  width: 40px;
-  height: 40px;
-  border-radius: 4px;
+  width: 48px;
+  height: 48px;
+  border-radius: 6px;
+  object-fit: cover;
+}
+
+.song-text {
+  display: flex;
+  flex-direction: column;
 }
 
 .song-title {
   color: white;
+  font-weight: 500;
 }
 
 .song-artist {
@@ -90,6 +125,42 @@
   font-size: 14px;
 }
 
-.song-duration {
-  color: #b3b3b3;
+/* ============================ */
+/* Empty / Not Found State      */
+/* ============================ */
+
+.searchlist-empty {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 70vh;
+  color: #bbb;
+  font-size: 18px;
+}
+
+/* ============================ */
+/* Responsive                   */
+/* ============================ */
+
+@media (max-width: 768px) {
+  .searchlist-grid {
+    grid-template-columns: 1fr;
+    gap: 24px;
+  }
+
+  .top-result-card img {
+    width: 120px;
+    height: 120px;
+  }
+
+  .play-btn {
+    width: 45px;
+    height: 45px;
+    font-size: 18px;
+  }
+
+  .song-info img {
+    width: 40px;
+    height: 40px;
+  }
 }

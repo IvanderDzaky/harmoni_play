@@ -122,3 +122,18 @@
   background: #2ecc71;
   transform: scale(1.05);
 }
+
+.auth-message {
+  text-align: center;
+  margin: 10px 0 15px;
+  font-weight: 500;
+  font-size: 14px;
+}
+
+.auth-message.success {
+  color: #4caf50;
+}
+
+.auth-message.error {
+  color: #ff5252;
+}

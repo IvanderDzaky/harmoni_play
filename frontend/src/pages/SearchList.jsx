@@ -13,10 +13,10 @@ const SearchList = () => {
   const [songs, setSongs] = useState([]);
   const [loading, setLoading] = useState(false);
 
-  const { playSong } = usePlayer(); // 🔥 global player
+  const { playSong } = usePlayer();
 
   useEffect(() => {
-    if (!query || !query.trim()) {
+    if (!query?.trim()) {
       setSongs([]);
       setLoading(false);
       return;
@@ -24,21 +24,21 @@ const SearchList = () => {
 
     setLoading(true);
 
-    const fetchSongsByName = async () => {
+    const fetchSongs = async () => {
       try {
         const result = await getSongsByName(query);
         setSongs(result);
-      } catch (error) {
-        console.log(error);
+      } catch (err) {
+        console.error(err);
       } finally {
         setLoading(false);
       }
     };
 
-    fetchSongsByName();
+    fetchSongs();
   }, [query]);
 
-  const topResult = songs.length > 0 ? songs[0] : null;
+  const topResult = songs[0] || null;
 
   if (loading) {
     return (
@@ -48,16 +48,9 @@ const SearchList = () => {
     );
   }
 
-  if (songs.length === 0) {
+  if (!songs.length) {
     return (
-      <div
-        style={{
-          display: "flex",
-          justifyContent: "center",
-          alignItems: "center",
-          height: "100vh",
-        }}
-      >
+      <div className="searchlist-empty">
         <p>Songs Not Found</p>
       </div>
     );
@@ -68,7 +61,7 @@ const SearchList = () => {
       <div className="searchlist-grid">
         {/* TOP RESULT */}
         <div>
-          <h3 className="section-title">Top result</h3>
+          <h3 className="section-title">Top Result</h3>
 
           {topResult && (
             <div className="top-result-card">
@@ -95,7 +88,6 @@ const SearchList = () => {
         {/* SONG LIST */}
         <div>
           <h3 className="section-title">Songs</h3>
-
           <div className="song-list">
             {songs.map((song) => (
               <div
@@ -112,8 +104,11 @@ const SearchList = () => {
                     }
                     alt={song.title}
                   />
-                  <div>
+                  <div className="song-text">
                     <p className="song-title">{song.title}</p>
+                    {song.artist_name && (
+                      <p className="song-artist">{song.artist_name}</p>
+                    )}
                   </div>
                 </div>
               </div>

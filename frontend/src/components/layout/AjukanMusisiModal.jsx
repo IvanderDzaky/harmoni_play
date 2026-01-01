@@ -24,7 +24,7 @@ export default function AjukanMusisiModal({ onClose }) {
     const formData = new FormData();
     formData.append("name", name);
     formData.append("bio", bio);
-    if (photo) formData.append("file", photo); // harus sesuai backend
+    if (photo) formData.append("file", photo); // sesuai backend
 
     setLoading(true);
     setMessage("");
@@ -48,6 +48,7 @@ export default function AjukanMusisiModal({ onClose }) {
     <div className="modal-overlay">
       <div className="modal-content">
         {loading && <Loader />}
+
         <h3>Ajukan Menjadi Musisi</h3>
         {message && <p className="message">{message}</p>}
 
@@ -59,12 +60,14 @@ export default function AjukanMusisiModal({ onClose }) {
             onChange={(e) => setName(e.target.value)}
             required
           />
+
           <textarea
             placeholder="Bio"
             value={bio}
             onChange={(e) => setBio(e.target.value)}
             required
           />
+
           <label>Foto (Opsional)</label>
           <input type="file" accept="image/*" onChange={handlePhotoChange} />
 

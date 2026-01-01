@@ -9,7 +9,7 @@ export default function Login() {
   const navigate = useNavigate();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const [error, setError] = useState("");
+  const [message, setMessage] = useState(""); // konsisten dengan Register
   const [loading, setLoading] = useState(false);
   const [success, setSuccess] = useState(false);
 
@@ -17,33 +17,28 @@ export default function Login() {
     e.preventDefault();
     setLoading(true);
     setSuccess(false);
-    setError("");
+    setMessage("");
 
     try {
       const res = await loginUser({ email, password });
 
-      // 🔑 Simpan token dan data user
       localStorage.setItem("token", res.data.token);
       localStorage.setItem("user", JSON.stringify(res.data.data));
-      console.log("USER LS:", JSON.parse(localStorage.getItem("user")));
 
       setSuccess(true);
-
       setTimeout(() => {
         const user = JSON.parse(localStorage.getItem("user"));
 
         if (user?.role === "admin") {
           navigate("/admin");
         } else if (user?.role === "artist") {
-          navigate("/artist/dashboard"); // ⬅ redirect artist
+          navigate("/artist/dashboard");
         } else {
-          navigate("/dashboard"); // reguler / premium
+          navigate("/dashboard");
         }
       }, 500);
-
     } catch (err) {
-      const msg = err.response?.data?.message || "Login gagal";
-      setError(msg);
+      setMessage(err.response?.data?.message || "❌ Login gagal.");
     } finally {
       setLoading(false);
     }
@@ -54,12 +49,13 @@ export default function Login() {
       <div className="auth-box">
         <h2 style={{ color: "white" }}>Log in to Harmoni Play</h2>
 
+        {message && <p className={`auth-message ${message.startsWith("✅") ? "success" : "error"}`}>{message}</p>}
+
         <form onSubmit={handleLogin}>
           <AuthInput
             label="Email"
             type="email"
             value={email}
-            error={error}  // ⬅ KIRIM ERROR
             onChange={(e) => setEmail(e.target.value)}
           />
 
@@ -67,7 +63,6 @@ export default function Login() {
             label="Password"
             type="password"
             value={password}
-            error={error} // ⬅ KIRIM ERROR
             onChange={(e) => setPassword(e.target.value)}
           />
 

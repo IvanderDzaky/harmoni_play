@@ -67,7 +67,8 @@ export default function ArtistUpload() {
           headers: { Authorization: `Bearer ${localStorage.getItem("token")}` },
         });
         const artistData = await res.json();
-        artist_id = artistData.artist_id;
+        artist_id = artistData.artist_id || artistData.data?.artist_id;
+        if (!artist_id) return setMessage("Gagal mengambil data artist.");
         user = { ...user, artist_id };
         localStorage.setItem("user", JSON.stringify(user));
       } catch (err) {
@@ -83,7 +84,19 @@ export default function ArtistUpload() {
     if (coverImage) formData.append("cover_image", coverImage);
     formData.append("artist_id", artist_id);
     formData.append("uploaded_by", user.user_id);
-    selectedGenres.forEach((g) => formData.append("genres", g));
+
+    // Append genres dengan format backend friendly
+    selectedGenres.forEach((g) => formData.append("genres[]", g));
+
+    console.log("FormData siap dikirim:", {
+      title,
+      lyrics,
+      audioFile,
+      coverImage,
+      artist_id,
+      uploaded_by: user.user_id,
+      genres: selectedGenres,
+    });
 
     setLoading(true);
     setMessage("");
@@ -91,7 +104,8 @@ export default function ArtistUpload() {
     try {
       await uploadSong(formData);
       setMessage("Lagu berhasil diunggah!");
-      // Reset
+
+      // Reset form
       setTitle("");
       setLyrics("");
       setSelectedGenres([]);
@@ -101,7 +115,7 @@ export default function ArtistUpload() {
       setAudioPreview(null);
     } catch (err) {
       console.error(err);
-      setMessage(err.response?.data?.message || "Gagal mengunggah lagu.");
+      setMessage(err.response?.data?.message || err.message || "Gagal mengunggah lagu.");
     } finally {
       setLoading(false);
     }
