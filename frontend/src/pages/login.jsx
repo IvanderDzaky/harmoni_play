@@ -52,8 +52,6 @@ export default function Login() {
   return (
     <div className="auth-container">
       <div className="auth-box">
-        <img src="/harmoni_play_logo.png" className="auth-logo" />
-
         <h2 style={{ color: "white" }}>Log in to Harmoni Play</h2>
 
         <form onSubmit={handleLogin}>
