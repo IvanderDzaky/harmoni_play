@@ -195,3 +195,22 @@ export const getArtistRequests = async (req, res) => {
     res.status(500).json({ message: err.message });
   }
 };
+
+export const getMySongs = async (req, res) => {
+  try {
+    const user_id = req.user.user_id || req.user.id;
+    if (!user_id) {
+      return res.status(400).json({ message: "User ID missing in token" });
+    }
+
+    const artist = await Artist.findOne({ where: { user_id } });
+    if (!artist) {
+      return res.status(404).json({ message: "Artist not found" });
+    }
+
+    const songs = await artist.getSongs();
+    res.json(songs);
+  } catch (err) {
+    res.status(500).json({ message: err.message });
+  }
+};

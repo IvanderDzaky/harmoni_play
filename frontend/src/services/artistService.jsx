@@ -1,14 +1,29 @@
+import axios from "axios";
+
 const BASE_URL = "http://localhost:5000/api/artists";
 
-// Ajukan musisi (PAKAI FORM DATA)
+// ================= AUTH HEADER =================
+const getAuthHeader = () => {
+  const token = localStorage.getItem("token");
+  if (!token) throw new Error("Token tidak ditemukan. Silakan login.");
+  return { Authorization: `Bearer ${token}` };
+};
+
+// ================= FETCH LAGU MILIK MUSISI =================
+export const getMySongs = async () => {
+  const headers = getAuthHeader();
+  const res = await axios.get(`${BASE_URL}/my-songs`, { headers });
+  return res.data;
+};
+
+// ================= AJUKAN MUSISI =================
 export const ajukanMusisi = async (formData) => {
   const token = localStorage.getItem("token");
-
   const res = await fetch(`${BASE_URL}/ajukan`, {
     method: "POST",
     headers: {
       Authorization: `Bearer ${token}`,
-      // JANGAN set Content-Type
+      // JANGAN set Content-Type, biarkan browser atur FormData
     },
     body: formData,
   });
@@ -21,10 +36,9 @@ export const ajukanMusisi = async (formData) => {
   return res.json();
 };
 
-// Admin verifikasi artist (TETAP JSON, INI BENAR)
+// ================= ADMIN VERIFIKASI ARTIST =================
 export const adminVerifyArtist = async (artist_id, verified) => {
   const token = localStorage.getItem("token");
-
   const res = await fetch(`${BASE_URL}/verify/${artist_id}`, {
     method: "PUT",
     headers: {
@@ -40,4 +54,16 @@ export const adminVerifyArtist = async (artist_id, verified) => {
   }
 
   return res.json();
+};
+
+// ================= UPLOAD SONG =================
+export const uploadSong = async (formData) => {
+  const token = localStorage.getItem("token");
+  const res = await axios.post("/api/songs/upload", formData, {
+    headers: {
+      "Content-Type": "multipart/form-data",
+      Authorization: `Bearer ${token}`,
+    },
+  });
+  return res.data;
 };

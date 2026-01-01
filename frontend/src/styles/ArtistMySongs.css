@@ -1,0 +1,56 @@
+/* =========================
+   Artist My Songs Page
+   ========================= */
+.artist-my-songs-page {
+  color: white;
+  background: linear-gradient(to bottom, #121212, #1e1e1e);
+  padding: 30px;
+  min-height: 100vh;
+  font-family: 'Segoe UI', sans-serif;
+}
+
+.artist-my-songs-page h2 {
+  font-size: 24px;
+  margin-bottom: 20px;
+}
+
+/* ===== Song List ===== */
+.song-list {
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+}
+
+.song-card {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background: rgba(255,255,255,0.05);
+  padding: 18px 22px;
+  border-radius: 12px;
+  box-shadow: 0 4px 15px rgba(0,0,0,0.5);
+  transition: transform 0.2s ease, background 0.2s ease;
+}
+
+.song-card:hover {
+  background: rgba(255,255,255,0.08);
+  transform: translateY(-2px);
+}
+
+.song-info h3 {
+  margin: 0;
+  font-size: 18px;
+}
+
+.song-info p {
+  margin: 6px 0 0;
+  color: #aaa;
+  font-size: 14px;
+}
+
+/* ===== Empty State ===== */
+.artist-my-songs-page p {
+  text-align: center;
+  color: #aaa;
+  margin-top: 40px;
+}

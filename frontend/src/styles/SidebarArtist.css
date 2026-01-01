@@ -1,0 +1,41 @@
+.sidebar.artist-sidebar {
+  width: 220px;
+  background-color: #1f1f1f;
+  color: white;
+  display: flex;
+  flex-direction: column;
+}
+
+.sidebar-header {
+  padding: 1rem;
+  border-bottom: 1px solid #2a2a2a;
+}
+
+.sidebar-title {
+  font-size: 1.2rem;
+  font-weight: bold;
+}
+
+.sidebar-menu {
+  display: flex;
+  flex-direction: column;
+  margin-top: 1rem;
+}
+
+.menu-item {
+  display: flex;
+  align-items: center;
+  padding: 0.75rem 1rem;
+  color: white;
+  text-decoration: none;
+}
+
+.menu-item:hover,
+.menu-item.active {
+  background-color: #2a2a2a;
+  border-left: 4px solid #ff6b6b;
+}
+
+.menu-icon {
+  margin-right: 0.75rem;
+}

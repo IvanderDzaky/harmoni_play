@@ -22,28 +22,27 @@ export default function Login() {
     try {
       const res = await loginUser({ email, password });
 
-      // 🔑 SIMPAN TOKEN
+      // 🔑 Simpan token dan data user
       localStorage.setItem("token", res.data.token);
-      localStorage.setItem("user",JSON.stringify(res.data.data))
+      localStorage.setItem("user", JSON.stringify(res.data.data));
       console.log("USER LS:", JSON.parse(localStorage.getItem("user")));
 
-       
       setSuccess(true);
 
       setTimeout(() => {
-          const user = JSON.parse(localStorage.getItem("user"));
+        const user = JSON.parse(localStorage.getItem("user"));
 
-          if (user?.role === "admin") {
-            navigate("/admin");
-          } else {
-            navigate("/dashboard");
-          }
-        }, 500);
-
+        if (user?.role === "admin") {
+          navigate("/admin");
+        } else if (user?.role === "artist") {
+          navigate("/artist/dashboard"); // ⬅ redirect artist
+        } else {
+          navigate("/dashboard"); // reguler / premium
+        }
+      }, 500);
 
     } catch (err) {
-      const msg =
-        err.response?.data?.message || "Login gagal";
+      const msg = err.response?.data?.message || "Login gagal";
       setError(msg);
     } finally {
       setLoading(false);

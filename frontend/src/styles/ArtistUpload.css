@@ -1,0 +1,76 @@
+/* =========================
+   Artist Upload Page
+   ========================= */
+.artist-upload-page {
+  color: white;
+  background: linear-gradient(to bottom, #121212, #1e1e1e);
+  padding: 30px;
+  min-height: 100vh;
+  font-family: 'Segoe UI', sans-serif;
+}
+
+.artist-upload-page h2 {
+  font-size: 24px;
+  margin-bottom: 20px;
+}
+
+.message {
+  margin-bottom: 20px;
+  color: #1db954;
+  font-weight: bold;
+}
+
+/* ===== Upload Form ===== */
+.upload-form {
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+  background: rgba(255, 255, 255, 0.05);
+  padding: 25px;
+  border-radius: 12px;
+  box-shadow: 0 4px 15px rgba(0,0,0,0.5);
+}
+
+.upload-form input[type="text"],
+.upload-form input[type="number"],
+.upload-form textarea,
+.upload-form input[type="file"] {
+  padding: 12px 15px;
+  border-radius: 8px;
+  border: none;
+  outline: none;
+  background: rgba(255,255,255,0.1);
+  color: white;
+  font-size: 14px;
+}
+
+.upload-form textarea {
+  resize: vertical;
+  min-height: 80px;
+}
+
+.upload-form input::placeholder,
+.upload-form textarea::placeholder {
+  color: #aaa;
+}
+
+.upload-form button {
+  background: #1db954;
+  color: #fff;
+  padding: 12px;
+  border: none;
+  border-radius: 8px;
+  font-weight: bold;
+  cursor: pointer;
+  transition: background 0.2s ease, transform 0.2s ease;
+}
+
+.upload-form button:hover {
+  background: #1ed760;
+  transform: translateY(-2px);
+}
+
+.upload-form button:disabled {
+  background: #555;
+  cursor: not-allowed;
+}

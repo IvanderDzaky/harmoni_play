@@ -1,0 +1,52 @@
+.topbar.artist-topbar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  height: 60px;
+  padding: 0 1rem;
+  background-color: #121212;
+  border-bottom: 1px solid #2a2a2a;
+}
+
+.nav-btn {
+  background: none;
+  border: none;
+  color: white;
+  font-size: 1.2rem;
+  cursor: pointer;
+}
+
+.topbar-right {
+  display: flex;
+  align-items: center;
+}
+
+.dropdown-toggle {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  background: none;
+  border: none;
+  color: white;
+  cursor: pointer;
+}
+
+.dropdown-menu {
+  position: absolute;
+  top: 60px;
+  right: 1rem;
+  background-color: #1f1f1f;
+  border: 1px solid #2a2a2a;
+  border-radius: 6px;
+  overflow: hidden;
+}
+
+.dropdown-item {
+  padding: 0.75rem 1rem;
+  cursor: pointer;
+  color: white;
+}
+
+.dropdown-item.logout:hover {
+  background-color: #ff4d4d;
+}
