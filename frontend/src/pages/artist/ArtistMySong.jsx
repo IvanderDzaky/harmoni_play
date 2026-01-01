@@ -12,13 +12,13 @@ export default function ArtistMySongs() {
   useEffect(() => {
     const fetchSongs = async () => {
       try {
-        const songsData = await getMySongs(); // token otomatis dipakai
-        setSongs(songsData || []);            // langsung gunakan array
+        const songsData = await getMySongs();
+        setSongs(songsData || []);
       } catch (err) {
         console.error(err);
         setError(
           err.response?.data?.message || err.message || "Gagal memuat lagu"
-        ); // ambil pesan dari backend
+        );
       } finally {
         setLoading(false);
       }
@@ -28,21 +28,40 @@ export default function ArtistMySongs() {
   }, []);
 
   if (loading) return <Loader />;
-  if (error) return <p style={{ color: "red" }}>{error}</p>;
+  if (error) return <p style={{ color: "red", textAlign: "center" }}>{error}</p>;
 
   return (
     <div className="artist-my-songs-page">
-      <h2>Lagu Saya</h2>
       {songs.length === 0 ? (
-        <p>Belum ada lagu yang diunggah.</p>
+        <p style={{ textAlign: "center" }}>Belum ada lagu yang diunggah.</p>
       ) : (
-        <div className="song-list">
+        <div className="song-grid">
           {songs.map((song) => (
-            <div key={song.id} className="song-card">
+            <div key={song.song_id} className="song-card">
+              <div className="cover-wrapper">
+                {song.cover_image ? (
+                  <img
+                    src={song.cover_image}
+                    alt={song.title}
+                    className="song-cover"
+                  />
+                ) : (
+                  <div className="song-cover placeholder">No Cover</div>
+                )}
+
+                {/* Overlay audio player */}
+                {song.file_audio_url && (
+                  <div className="overlay">
+                    <audio controls className="mini-player" src={song.file_audio_url}></audio>
+                  </div>
+                )}
+              </div>
+
               <div className="song-info">
                 <h3>{song.title}</h3>
-                <p>ID Genre: {song.genre_id}</p>
-                <p>ID Album: {song.album_id || "-"}</p>
+                {song.genres?.length > 0 && (
+                  <p className="genres">{song.genres.map((g) => g.name).join(", ")}</p>
+                )}
               </div>
             </div>
           ))}

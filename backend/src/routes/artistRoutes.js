@@ -8,12 +8,16 @@ import {
   ajukanMusisi,
   verifyArtist,
   getArtistRequests,
-  getMySongs
+  getMySongs,
+  getMyArtist
 } from "../controllers/artistController.js";
 import { authenticateToken } from "../middleware/authMiddleware.js";
 import { upload } from "../middleware/upload.js";
 
 const router = express.Router();
+
+// ================= MY ARTIST =================
+router.get("/my-artist", authenticateToken, getMyArtist);
 
 // ================= USER =================
 router.get("/my-songs", authenticateToken, getMySongs);

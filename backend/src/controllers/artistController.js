@@ -1,4 +1,5 @@
 import Artist from "../models/Artist.js";
+import User from "../models/User.js"; 
 import { supabase } from "../config/supabase.js";
 import crypto from "crypto";
 
@@ -110,33 +111,45 @@ export const deleteArtist = async (req, res) => {
   res.json({ message: "Artist deleted" });
 };
 
-// ================= AJUKAN MUSISI =================
 export const ajukanMusisi = async (req, res) => {
   try {
     const { name, bio } = req.body;
     const user_id = req.user.user_id;
     const file = req.file;
 
-    const existing = await Artist.findOne({ where: { user_id } });
-    if (existing)
-      return res.status(400).json({ message: "Sudah mengajukan musisi" });
-
-    let photo = null;
-
-    if (file) {
-      const ext = file.originalname.split(".").pop();
-      const filename = `${crypto.randomUUID()}.${ext}`;
-      photo = `photos/${filename}`;
-
-      const { error } = await supabase.storage
-        .from("Artist")
-        .upload(photo, file.buffer, {
-          contentType: file.mimetype,
-        });
-
-      if (error) throw error;
+    if (!name || !bio) {
+      return res.status(400).json({ message: "Nama dan bio wajib diisi" });
     }
 
+    // Cek apakah user sudah mengajukan
+    const existing = await Artist.findOne({ where: { user_id } });
+    if (existing) {
+      return res.status(400).json({ message: "Sudah mengajukan musisi" });
+    }
+
+    // Upload foto (opsional)
+    let photo = null;
+    if (file) {
+      try {
+        const ext = file.originalname.split(".").pop();
+        const filename = `${crypto.randomUUID()}.${ext}`;
+        photo = `photos/${filename}`;
+
+        const { error } = await supabase.storage
+          .from("Artist")
+          .upload(photo, file.buffer, { contentType: file.mimetype });
+
+        if (error) {
+          console.error("Gagal upload foto ke Supabase:", error.message);
+          photo = null; // tetap lanjut walaupun gagal upload
+        }
+      } catch (err) {
+        console.error("Error upload file:", err.message);
+        photo = null;
+      }
+    }
+
+    // Buat record Artist
     const artist = await Artist.create({
       name,
       bio,
@@ -145,12 +158,21 @@ export const ajukanMusisi = async (req, res) => {
       verified: false,
     });
 
-    res.status(201).json({
+    // Update role user menjadi 'artist'
+    try {
+      await User.update({ role: "artist" }, { where: { user_id } });
+    } catch (err) {
+      console.error("Gagal update role user:", err.message);
+      // tidak menghentikan proses
+    }
+
+    return res.status(201).json({
       message: "Pengajuan berhasil, tunggu verifikasi admin",
       artist,
     });
   } catch (err) {
-    res.status(500).json({ message: err.message });
+    console.error("Error ajukanMusisi:", err.message);
+    return res.status(500).json({ message: "Terjadi kesalahan server" });
   }
 };
 
@@ -210,6 +232,17 @@ export const getMySongs = async (req, res) => {
 
     const songs = await artist.getSongs();
     res.json(songs);
+  } catch (err) {
+    res.status(500).json({ message: err.message });
+  }
+};
+
+export const getMyArtist = async (req, res) => {
+  try {
+    const user_id = req.user.user_id;
+    const artist = await Artist.findOne({ where: { user_id } });
+    if (!artist) return res.status(404).json({ message: "Artist tidak ditemukan" });
+    res.json(artist); // termasuk artist_id
   } catch (err) {
     res.status(500).json({ message: err.message });
   }

@@ -9,34 +9,30 @@ export const createSong = async (req, res) => {
   try {
     const { title, artist_id, album_id, lyrics, uploaded_by, genres } = req.body;
 
-    if (!req.files?.file_audio || !req.files?.cover_image) {
-      return res.status(400).json({ message: "Audio and cover files are required" });
+    if (!req.files?.file_audio) {
+      return res.status(400).json({ message: "Audio file is required" });
     }
 
-    /* ---------- Upload Audio ---------- */
+    // Upload Audio
     const audioFile = req.files.file_audio[0];
-    const { data: audioData, error: audioError } =
-      await supabase.storage.from("Songs").upload(
-        `audio/${Date.now()}-${audioFile.originalname}`,
-        audioFile.buffer,
-        { contentType: audioFile.mimetype, upsert: true }
-      );
+    const { data: audioData, error: audioError } = await supabase.storage
+      .from("Songs")
+      .upload(`audio/${Date.now()}-${audioFile.originalname}`, audioFile.buffer, { contentType: audioFile.mimetype, upsert: true });
     if (audioError) throw audioError;
+    const audioUrl = supabase.storage.from("Songs").getPublicUrl(audioData?.path)?.data?.publicUrl || null;
 
-    /* ---------- Upload Cover ---------- */
-    const coverFile = req.files.cover_image[0];
-    const { data: coverData, error: coverError } =
-      await supabase.storage.from("Songs").upload(
-        `covers/${Date.now()}-${coverFile.originalname}`,
-        coverFile.buffer,
-        { contentType: coverFile.mimetype, upsert: true }
-      );
-    if (coverError) throw coverError;
+    // Upload Cover (opsional)
+    let coverUrl = null;
+    if (req.files?.cover_image) {
+      const coverFile = req.files.cover_image[0];
+      const { data: coverData, error: coverError } = await supabase.storage
+        .from("Songs")
+        .upload(`covers/${Date.now()}-${coverFile.originalname}`, coverFile.buffer, { contentType: coverFile.mimetype, upsert: true });
+      if (coverError) throw coverError;
+      coverUrl = supabase.storage.from("Songs").getPublicUrl(coverData?.path)?.data?.publicUrl || null;
+    }
 
-    const audioUrl = supabase.storage.from("Songs").getPublicUrl(audioData.path).data.publicUrl;
-    const coverUrl = supabase.storage.from("Songs").getPublicUrl(coverData.path).data.publicUrl;
-
-    /* ---------- Create Song ---------- */
+    // Create Song
     const song = await Song.create({
       title,
       artist_id,
@@ -47,12 +43,9 @@ export const createSong = async (req, res) => {
       uploaded_by,
     });
 
-    /* ---------- Insert Genres ---------- */
+    // Insert Genres
     if (Array.isArray(genres) && genres.length > 0) {
-      const rows = genres.map((genre_id) => ({
-        song_id: song.song_id,
-        genre_id,
-      }));
+      const rows = genres.map((genre_id) => ({ song_id: song.song_id, genre_id }));
       await SongGenre.bulkCreate(rows);
     }
 
