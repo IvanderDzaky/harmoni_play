@@ -28,9 +28,7 @@ const SongCard = ({ song, index, onPlay }) => {
 
       <div className="song-info">
         <h3 className="song-title">{song.title}</h3>
-        {song.artist_name && (
-          <p className="song-artist">{song.artist_name}</p>
-        )}
+        {song.artist_name && <p className="song-artist">{song.artist_name}</p>}
       </div>
     </div>
   );
