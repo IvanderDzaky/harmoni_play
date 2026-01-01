@@ -1,4 +1,5 @@
 const BASE_URL = "http://localhost:5000/api/playlist-songs";
+import axios from "axios";
 
 const getAuthHeader = () => ({
   Authorization: `Bearer ${localStorage.getItem("token")}`,
@@ -6,15 +7,21 @@ const getAuthHeader = () => ({
 });
 
 export const getAllPlaylistSongs = async (playlistId) => {
-  const response = await fetch(`${BASE_URL}/${playlistId}`, {
-    headers: getAuthHeader(),
-  });
+  const res = await axios.get(
+    `http://localhost:5000/api/playlist-songs/${playlistId}`
+  );
 
-  if (!response.ok) {
-    throw new Error("Failed to fetch playlist songs");
-  }
+  const playlistSongs = res.data.data || [];
 
-  return response.json();
+  return playlistSongs.map((item) => ({
+    song_id: item.song.song_id,
+    title: item.song.title,
+    cover_image: item.song.cover_image,
+    artist: item.song.artist?.name || "-",
+    album: item.song.album?.title || "-",
+    duration: "-",
+    added_at: item.added_at,
+  }));
 };
 
 export const addSongToPlaylist = async (payload) => {

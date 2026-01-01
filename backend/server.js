@@ -15,6 +15,7 @@ import subscriptionRoutes from "./src/routes/subscriptionRoutes.js";
 import artistRoutes from "./src/routes/artistRoutes.js";
 import genreRoutes from "./src/routes/genreRoutes.js";
 import albumRoutes from "./src/routes/albumRoutes.js";
+import songGenreRoutes from "./src/routes/songGenreRoutes.js";
 import "./src/models/index.js";
 
 dotenv.config();
@@ -45,3 +46,4 @@ app.use("/api/subscriptions", subscriptionRoutes);
 app.use("/api/artists", artistRoutes);
 app.use("/api/genres", genreRoutes);
 app.use("/api/albums", albumRoutes);
+app.use("/api/song-genres", songGenreRoutes);

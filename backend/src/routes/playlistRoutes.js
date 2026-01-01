@@ -7,13 +7,13 @@ import {
   getPlaylistById,
   updatePlaylist,
   deletePlaylist,
-  getPlaylistsByUserId,
+  getAllPlaylistByUser,
   getUserPlaylistsContainingSong,
 } from "../controllers/playlistController.js";
 
 const router = express.Router();
 router.get("/song/:songId", authenticateToken, getUserPlaylistsContainingSong);
-router.get("/user/me", authenticateToken, getPlaylistsByUserId);
+router.get("/user/me", authenticateToken, getAllPlaylistByUser);
 router.get("/:id", getPlaylistById);
 
 

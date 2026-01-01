@@ -1,89 +1,87 @@
+/* ===== Playlist Page ===== */
 .playlist-page {
-  padding: 32px;
+  padding: 20px;
+  min-height: 100vh;
+  background-color: #121212;
   color: #fff;
+  font-family: sans-serif;
 }
 
-/* ===== HEADER ===== */
+/* HEADER */
 .playlist-header {
   display: flex;
-  gap: 24px;
-  margin-bottom: 32px;
-}
-
-.playlist-cover {
-  width: 200px;
-  height: 200px;
-  object-fit: cover;
-  border-radius: 8px;
-  background: #222;
-}
-
-.playlist-info {
-  display: flex;
   flex-direction: column;
-  justify-content: flex-end;
+  gap: 5px;
+  margin-bottom: 20px;
 }
 
-.playlist-public {
+.playlist-info .playlist-public {
   font-size: 12px;
-  letter-spacing: 1px;
-  opacity: 0.7;
+  color: #888;
+  font-weight: 500;
 }
 
 .playlist-title {
-  font-size: 48px;
-  font-weight: 700;
-  margin: 8px 0;
+  font-size: 28px;
+  margin: 0;
 }
 
 .playlist-description {
-  opacity: 0.7;
-  margin-bottom: 8px;
+  font-size: 14px;
+  color: #bbb;
+  margin: 0;
 }
 
 .playlist-stats {
-  font-size: 14px;
-  opacity: 0.8;
-}
-
-/* ===== TABLE ===== */
-.playlist-table {
-  width: 100%;
-  border-collapse: collapse;
-}
-
-.playlist-table thead {
-  border-bottom: 1px solid #2c2c2c;
-}
-
-.playlist-table th {
-  text-align: left;
-  padding: 12px;
-  font-size: 13px;
+  font-size: 12px;
   color: #aaa;
 }
 
+/* SONG TABLE */
+.playlist-table {
+  width: 100%;
+  border-collapse: collapse;
+  table-layout: fixed;
+}
+
+.playlist-table th,
 .playlist-table td {
-  padding: 12px;
+  text-align: left;
+  padding: 12px 10px;
   font-size: 14px;
 }
 
-.playlist-table tbody tr:hover {
-  background: rgba(255, 255, 255, 0.05);
+.playlist-table th {
+  border-bottom: 1px solid #333;
+  color: #aaa;
 }
 
-/* ===== SONG CELL ===== */
+.playlist-table tbody tr {
+  border-bottom: 1px solid #222;
+  transition: background 0.2s;
+}
+
+.playlist-table tbody tr:hover {
+  background-color: #1e1e1e;
+}
+
+/* Current playing song highlight */
+.playlist-table tbody tr.playing {
+  background-color: #1db95433;
+}
+
+/* Song title cell */
 .song-title {
   display: flex;
   align-items: center;
-  gap: 12px;
+  gap: 10px;
 }
 
 .song-cover {
-  width: 44px;
-  height: 44px;
-  border-radius: 4px;
+  width: 40px;
+  height: 40px;
   object-fit: cover;
+  border-radius: 4px;
 }
 
 .song-name {
@@ -91,6 +89,28 @@
 }
 
 .song-artist {
-  font-size: 13px;
-  color: #aaa;
+  font-size: 12px;
+  color: #888;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .playlist-title {
+    font-size: 22px;
+  }
+
+  .playlist-description {
+    font-size: 12px;
+  }
+
+  .playlist-table th,
+  .playlist-table td {
+    font-size: 12px;
+    padding: 8px 6px;
+  }
+
+  .song-cover {
+    width: 30px;
+    height: 30px;
+  }
 }

@@ -13,27 +13,11 @@ const Song = sequelize.define(
       type: DataTypes.STRING(200),
       allowNull: false,
     },
-    artist_id: {
-      type: DataTypes.INTEGER,
-      allowNull: true,
-    },
-    album_id: {
-      type: DataTypes.INTEGER,
-      allowNull: true,
-    },
-    genre_id: {
-      type: DataTypes.INTEGER,
-      allowNull: true,
-    },
-    lyrics: {
-      type: DataTypes.TEXT,
-    },
-    file_audio: {
-      type: DataTypes.STRING,
-    },
-    cover_image: {
-      type: DataTypes.STRING,
-    },
+    artist_id: DataTypes.INTEGER,
+    album_id: DataTypes.INTEGER,
+    lyrics: DataTypes.TEXT,
+    file_audio: DataTypes.STRING,
+    cover_image: DataTypes.STRING,
     uploaded_by: {
       type: DataTypes.INTEGER,
       allowNull: false,

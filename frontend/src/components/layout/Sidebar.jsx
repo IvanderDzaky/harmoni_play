@@ -14,10 +14,10 @@ export default function Sidebar() {
   useEffect(() => {
     const fetchPlaylist = async () => {
       try {
-        const data = await getAllPlayListByUser();
-        setPlaylist(data);
+        const data = await getAllPlayListByUser(); // sudah kirim token
+        setPlaylist(data); // data dari backend array playlist {id, name, description, songs}
       } catch (err) {
-        console.error(err);
+        console.error("Error fetch playlist:", err);
       } finally {
         setLoading(false);
       }
@@ -29,11 +29,11 @@ export default function Sidebar() {
     try {
       const response = await addPlaylist({ name, description });
       if (response) {
-        setPlaylist((prev) => [...prev, response]);
+        setPlaylist((prev) => [...prev, response]); // response sudah ada id
         setShowEditModal(false);
       }
     } catch (err) {
-      console.error(err);
+      console.error("Error create playlist:", err);
     }
   };
 
@@ -90,10 +90,8 @@ export default function Sidebar() {
           ) : (
             playlist.map((item) => (
               <NavLink
-                key={item.playlist_id}
-                to={`/playlist/${item.playlist_id}?name=${encodeURIComponent(
-                  item.name
-                )}&description=${encodeURIComponent(item.description)}`}
+                key={item.id} // fix key
+                to={`/playlist/${item.id}?name=${encodeURIComponent(item.name)}&description=${encodeURIComponent(item.description)}`}
                 className="menu-item playlist-item"
               >
                 <div className="menu-icon">

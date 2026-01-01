@@ -8,7 +8,7 @@ export const createPlaylist = async (req, res) => {
     const playlist = await Playlist.create({
       name,
       description,
-      created_by: req.user.user_id,
+      created_by: req.user.user_id, // pastikan ini sesuai model
     });
 
     res.status(201).json({
@@ -17,7 +17,10 @@ export const createPlaylist = async (req, res) => {
     });
   } catch (error) {
     console.error("Error creating playlist:", error);
-    res.status(500).json({ message: "Gagal membuat playlist", error: error.message });
+    res.status(500).json({
+      message: "Gagal membuat playlist",
+      error: error.message,
+    });
   }
 };
 
@@ -25,12 +28,17 @@ export const createPlaylist = async (req, res) => {
 export const getAllPlaylists = async (req, res) => {
   try {
     const playlists = await Playlist.findAll({
-      include: [{ model: Song, through: { attributes: [] } }],
+      include: [
+        { model: Song, as: "songs", through: { attributes: [] } } // pakai alias sesuai relasi
+      ],
     });
     res.json(playlists);
   } catch (error) {
     console.error("Error fetching playlists:", error);
-    res.status(500).json({ message: "Gagal fetch playlist", error: error.message });
+    res.status(500).json({
+      message: "Gagal fetch playlist",
+      error: error.message,
+    });
   }
 };
 
@@ -38,7 +46,9 @@ export const getAllPlaylists = async (req, res) => {
 export const getPlaylistById = async (req, res) => {
   try {
     const playlist = await Playlist.findByPk(req.params.id, {
-      include: [{ model: Song, through: { attributes: [] } }],
+      include: [
+        { model: Song, as: "songs", through: { attributes: [] } }
+      ],
     });
 
     if (!playlist) return res.status(404).json({ message: "Playlist not found" });
@@ -46,7 +56,10 @@ export const getPlaylistById = async (req, res) => {
     res.json(playlist);
   } catch (error) {
     console.error("Error fetching playlist:", error);
-    res.status(500).json({ message: "Gagal fetch playlist", error: error.message });
+    res.status(500).json({
+      message: "Gagal fetch playlist",
+      error: error.message,
+    });
   }
 };
 
@@ -65,7 +78,10 @@ export const updatePlaylist = async (req, res) => {
     });
   } catch (error) {
     console.error("Error updating playlist:", error);
-    res.status(500).json({ message: "Gagal update playlist", error: error.message });
+    res.status(500).json({
+      message: "Gagal update playlist",
+      error: error.message,
+    });
   }
 };
 
@@ -81,26 +97,33 @@ export const deletePlaylist = async (req, res) => {
     res.json({ message: "Playlist deleted successfully" });
   } catch (error) {
     console.error("Error deleting playlist:", error);
-    res.status(500).json({ message: "Gagal hapus playlist", error: error.message });
+    res.status(500).json({
+      message: "Gagal hapus playlist",
+      error: error.message,
+    });
   }
 };
 
-// GET PLAYLISTS BY USER ID
-export const getPlaylistsByUserId = async (req, res) => {
+// GET ALL PLAYLISTS BY USER
+export const getAllPlaylistByUser = async (req, res) => {
   try {
     const playlists = await Playlist.findAll({
-      where: { created_by: req.user.user_id },
-      include: [{ model: Song, through: { attributes: [] } }],
+      where: { created_by: req.user.user_id }, // pastikan pakai created_by
+      include: [
+        { model: Song, as: "songs", through: { attributes: [] } }
+      ],
     });
-
     res.json(playlists);
   } catch (error) {
     console.error("Error fetching user's playlists:", error);
-    res.status(500).json({ message: "Gagal fetch playlist user", error: error.message });
+    res.status(500).json({
+      message: "Gagal fetch playlist user",
+      error: error.message,
+    });
   }
 };
 
-// ✅ GET USER'S PLAYLISTS THAT CONTAIN A SPECIFIC SONG
+// GET USER'S PLAYLISTS CONTAINING SPECIFIC SONG
 export const getUserPlaylistsContainingSong = async (req, res) => {
   try {
     const { songId } = req.params;
@@ -112,8 +135,9 @@ export const getUserPlaylistsContainingSong = async (req, res) => {
       include: [
         {
           model: Song,
-          where: { song_id: songId }, // <-- pakai song_id sesuai DB
-          through: { attributes: [] }, // hide PlaylistSong columns
+          as: "songs",
+          where: { song_id: songId },
+          through: { attributes: [] },
         },
       ],
     });
