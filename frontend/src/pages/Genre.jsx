@@ -42,7 +42,7 @@ const Genre = () => {
         <div className="genres-page">
 
             {songs && songs.length > 0 ? (
-                <SongSection songs={songs} titleSection={"genres"}/>
+                <SongSection songs={songs} titleSection={"Genres"}/>
             )
             :
             (

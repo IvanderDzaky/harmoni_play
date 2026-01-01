@@ -5,11 +5,15 @@ import {
   getSongById,
   updateSong,
   deleteSong,
-  getSongsByName
+  getSongsByName,
+  getSongsByCategoryId
 } from "../controllers/songController.js";
 import { upload } from "../middleware/upload.js";
 
 const router = express.Router();
+
+//search by categoryID
+router.get("/category/:id",getSongsByCategoryId)
 
 // Search by title
 router.get("/search", getSongsByName);
@@ -29,5 +33,4 @@ router.get("/", getAllSongs);
 router.get("/:id", getSongById);
 router.put("/:id", updateSong);
 router.delete("/:id", deleteSong);
-
 export default router;
