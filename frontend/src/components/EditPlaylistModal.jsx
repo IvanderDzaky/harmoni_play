@@ -15,12 +15,11 @@ export default function EditPlaylistModal({ onClose, onSave }) {
   return (
     <div className="modal-overlay">
       <div className="modal-box">
-        <h3>Create playlist</h3>
-
+        <h3>Edit Playlist</h3>
         <form onSubmit={handleSubmit}>
           <input
             type="text"
-            placeholder="My Playlist"
+            placeholder="Playlist Name"
             value={name}
             onChange={(e) => setName(e.target.value)}
           />
@@ -29,15 +28,15 @@ export default function EditPlaylistModal({ onClose, onSave }) {
             placeholder="Description (optional)"
             value={description}
             onChange={(e) => setDescription(e.target.value)}
-            rows={3}
+            rows={4}
           />
 
           <div className="modal-actions">
             <button type="button" className="btn-cancel" onClick={onClose}>
               Cancel
             </button>
-            <button type="submit" className="btn-create">
-              Create
+            <button type="submit" className="btn-save">
+              Save
             </button>
           </div>
         </form>

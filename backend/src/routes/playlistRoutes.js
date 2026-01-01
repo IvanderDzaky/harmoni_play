@@ -12,14 +12,14 @@ import {
 } from "../controllers/playlistController.js";
 
 const router = express.Router();
-
-router.post("/", authenticateToken, createPlaylist);
-router.get("/user/me", authenticateToken, getPlaylistsByUserId);
 router.get("/song/:songId", authenticateToken, getUserPlaylistsContainingSong);
-
-router.get("/", getAllPlaylists);
+router.get("/user/me", authenticateToken, getPlaylistsByUserId);
 router.get("/:id", getPlaylistById);
 
+
+//CRUD
+router.post("/", authenticateToken, createPlaylist);
+router.get("/", getAllPlaylists);
 router.put("/:id", authenticateToken, updatePlaylist);
 router.delete("/:id", authenticateToken, deletePlaylist);
 
