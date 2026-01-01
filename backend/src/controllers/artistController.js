@@ -13,10 +13,15 @@ export const getAllArtists = async (req, res) => {
 };
 
 export const getArtistById = async (req, res) => {
+  if (isNaN(req.params.id)) {
+    return res.status(400).json({ message: "Invalid artist ID" });
+  }
+
   const artist = await Artist.findByPk(req.params.id);
   if (!artist) return res.status(404).json({ message: "Artist not found" });
   res.json(artist);
 };
+
 
 // ================= CREATE (ADMIN) =================
 export const createArtist = async (req, res) => {
@@ -151,14 +156,42 @@ export const ajukanMusisi = async (req, res) => {
 
 // ================= VERIFY =================
 export const verifyArtist = async (req, res) => {
-  if (req.user.role !== "admin")
-    return res.status(403).json({ message: "Admin only" });
+  try {
+    if (req.user.role !== "admin")
+      return res.status(403).json({ message: "Admin only" });
 
-  const artist = await Artist.findByPk(req.params.artist_id);
-  if (!artist) return res.status(404).json({ message: "Artist not found" });
+    const artist = await Artist.findByPk(req.params.artist_id);
+    if (!artist)
+      return res.status(404).json({ message: "Artist not found" });
 
-  artist.verified = req.body.verified;
-  await artist.save();
+    const verified = req.body.verified ?? req.body.status; // ⬅️ FIX
 
-  res.json({ message: "Verification updated", artist });
+    if (typeof verified !== "boolean") {
+      return res.status(400).json({ message: "Invalid verification value" });
+    }
+
+    artist.verified = verified;
+    await artist.save();
+
+    res.json({ message: "Verification updated", artist });
+  } catch (err) {
+    res.status(500).json({ message: err.message });
+  }
+};
+
+
+export const getArtistRequests = async (req, res) => {
+  try {
+    if (req.user.role !== "admin") {
+      return res.status(403).json({ message: "Admin only" });
+    }
+
+    const artists = await Artist.findAll({
+      where: { verified: false },
+    });
+
+    res.json(artists);
+  } catch (err) {
+    res.status(500).json({ message: err.message });
+  }
 };

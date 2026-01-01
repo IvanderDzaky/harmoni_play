@@ -7,28 +7,34 @@ import {
   deleteArtist,
   ajukanMusisi,
   verifyArtist,
+  getArtistRequests, // ⬅️ TAMBAHAN
 } from "../controllers/artistController.js";
 import { authenticateToken } from "../middleware/authMiddleware.js";
 import { upload } from "../middleware/upload.js";
 
 const router = express.Router();
 
-// Routes umum
-router.get("/", getAllArtists);
-router.get("/:id", getArtistById);
-router.post("/", createArtist); // admin create artist langsung
-router.put("/:id", updateArtist);
-router.delete("/:id", deleteArtist);
+// ================= ADMIN =================
+router.get("/requests", authenticateToken, getArtistRequests);
 
-// Route khusus ajukan musisi oleh user
+router.put("/verify/:artist_id", authenticateToken, verifyArtist);
+
+// ================= PUBLIC =================
+router.get("/", getAllArtists);
+router.get("/:id", getArtistById); // harus di bawah semua route spesifik
+
+// ================= ADMIN CRUD ARTIST =================
+// (sebaiknya nanti ditambah middleware verifyAdmin)
+router.post("/", authenticateToken, createArtist);
+router.put("/:id", authenticateToken, updateArtist);
+router.delete("/:id", authenticateToken, deleteArtist);
+
+// ================= USER AJUKAN MUSISI =================
 router.post(
   "/ajukan",
   authenticateToken,
-  upload.single("photo"), // ⬅️ WAJIB
+  upload.single("photo"),
   ajukanMusisi
 );
-
-// Admin verifikasi artist
-router.put("/verify/:artist_id", authenticateToken, verifyArtist);
 
 export default router;

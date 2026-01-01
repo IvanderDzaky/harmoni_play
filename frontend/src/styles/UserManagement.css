@@ -1,0 +1,51 @@
+.admin-page h1 {
+  font-size: 28px;
+  margin-bottom: 24px;
+}
+
+.admin-table {
+  width: 100%;
+  border-collapse: collapse;
+  background: #121212;
+  border-radius: 12px;
+  overflow: hidden;
+}
+
+.admin-table th {
+  background: #1b1b1b;
+  text-align: left;
+  padding: 14px;
+  font-size: 14px;
+  color: #aaa;
+}
+
+.admin-table td {
+  padding: 14px;
+  border-bottom: 1px solid #222;
+  font-size: 15px;
+}
+
+.admin-table tr:hover {
+  background: #1c1c1c;
+}
+
+.role {
+  padding: 6px 12px;
+  border-radius: 20px;
+  font-size: 13px;
+  font-weight: 600;
+  display: inline-block;
+}
+
+.role.admin {
+  background: #1db954;
+  color: #000;
+}
+
+.role.artist {
+  background: #3b82f6;
+}
+
+.role.reguler {
+  background: #555;
+}

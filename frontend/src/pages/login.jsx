@@ -31,8 +31,15 @@ export default function Login() {
       setSuccess(true);
 
       setTimeout(() => {
-        navigate("/dashboard");
-      }, 1000);
+          const user = JSON.parse(localStorage.getItem("user"));
+
+          if (user?.role === "admin") {
+            navigate("/admin");
+          } else {
+            navigate("/dashboard");
+          }
+        }, 500);
+
 
     } catch (err) {
       const msg =
