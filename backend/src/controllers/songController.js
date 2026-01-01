@@ -153,21 +153,22 @@ export const getSongsByName = async (req, res) => {
    GET SONGS BY GENRE
 ================================ */
 export const getSongsByCategoryId = async (req, res) => {
-  const { id } = req.params;
+  const categoryId = Number(req.params.id); // pastikan number
 
   try {
     const songs = await Song.findAll({
       include: {
         model: Genre,
-        as: "genres", // HARUS sesuai alias di model
-        where: { genre_id: id },
+        as: "genres",    
+        where: { genre_id: categoryId }, 
         through: { attributes: [] },
+        required: true,     
       },
     });
 
-    res.json(songs); // kembalikan array, walau kosong
+    res.json(songs); 
   } catch (error) {
-    console.error(error);
+    console.error("Error fetching songs by category:", error);
     res.status(500).json({ message: error.message });
   }
 };

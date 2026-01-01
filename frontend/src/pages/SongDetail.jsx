@@ -171,7 +171,7 @@ export default function SongDetail() {
                 : comments.map((c) => (
                   <div className="comment-item" key={c.comment_id}>
                     <div className="comment-header">
-                      <strong>{c.User ? c.User.name : "Unknown"}</strong>
+                      <strong>{c.user ? c.user.name : "Unknown"}</strong>
                       <span className="comment-time">{timeAgo(c.created_at)}</span>
                     </div>
                     <p>{c.content}</p>
