@@ -1,5 +1,6 @@
 const BASE_URL = "http://localhost:5000/api/playlists";
 
+// Ambil token dari localStorage untuk Authorization
 const getAuthHeader = () => {
   const token = localStorage.getItem("token");
   return {
@@ -8,6 +9,7 @@ const getAuthHeader = () => {
   };
 };
 
+// GET semua playlist milik user yang sedang login
 export const getAllPlayListByUser = async () => {
   try {
     const response = await fetch(`${BASE_URL}/user/me`, {
@@ -23,6 +25,7 @@ export const getAllPlayListByUser = async () => {
   }
 };
 
+// Tambah playlist baru
 export const addPlaylist = async ({ name, description }) => {
   try {
     const response = await fetch(BASE_URL, {
@@ -41,14 +44,12 @@ export const addPlaylist = async ({ name, description }) => {
   }
 };
 
+// GET playlist user yang mengandung lagu tertentu
 export const getPlaylistsContainingSong = async (song_id) => {
   try {
-    const response = await fetch(
-      `${BASE_URL}/song/${song_id}`, // <--- hapus /user
-      {
-        headers: getAuthHeader(),
-      }
-    );
+    const response = await fetch(`${BASE_URL}/song/${song_id}`, {
+      headers: getAuthHeader(),
+    });
 
     if (!response.ok) throw new Error("Gagal fetch playlist lagu");
 

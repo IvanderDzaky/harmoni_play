@@ -17,7 +17,7 @@ const PlaylistSong = sequelize.define(
       type: DataTypes.INTEGER,
       allowNull: false,
     },
-    added_at: {                     
+    added_at: {
       type: DataTypes.DATE,
       allowNull: false,
       defaultValue: DataTypes.NOW,
@@ -25,7 +25,7 @@ const PlaylistSong = sequelize.define(
   },
   {
     tableName: "playlist_songs",
-    timestamps: false,              
+    timestamps: false,
   }
 );
 

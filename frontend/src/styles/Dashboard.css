@@ -1,25 +1,36 @@
 /* =============================
    DASHBOARD LAYOUT
 ============================= */
+
+/* Pastikan root full height */
+html, body, #root {
+  height: 100%;
+  margin: 0;
+}
+
 .dashboard-container {
   display: flex;
   width: 100%;
-  height: 100vh;
+  height: 100vh; /* full viewport */
   background-color: #121212;
   color: white;
+  overflow: hidden; /* scroll di content saja */
 }
 
+/* MAIN SECTION: Topbar + Content */
 .dashboard-main {
   flex: 1;
   display: flex;
   flex-direction: column;
-  position: relative;
+  overflow: hidden; /* agar scroll tidak memengaruhi sidebar */
 }
 
+/* Content scrollable */
 .dashboard-content {
+  flex: 1; /* stretch ke bawah */
   padding: 20px;
-  color: white;
-  padding-bottom: 120px; /* space for player */
+  overflow-y: auto;
+  padding-bottom: 120px; /* space untuk player */
 }
 
 .section-title {
