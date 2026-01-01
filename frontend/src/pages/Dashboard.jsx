@@ -1,32 +1,28 @@
 import { getAllSongs } from "../services/songsService";
 import { useEffect, useState } from "react";
-import Loader from "../components/layout/Loader";
 import SongSection from "../components/SongSection";
 import { usePlayer } from "../contexts/PlayerContext";
+import { useLoader } from "../contexts/LoaderContext"; // loader global
 
 export default function Dashboard() {
   const [songs, setSongs] = useState([]);
-  const [loading, setLoading] = useState(true);
-
-  const { playSong } = usePlayer(); // 🔥 pakai context
+  const { playSong } = usePlayer();
+  const { setLoading } = useLoader();
 
   useEffect(() => {
     const fetchAllSongs = async () => {
+      setLoading(true); // start loader global
       try {
         const data = await getAllSongs();
         setSongs(data);
       } catch (err) {
         console.log(err);
       } finally {
-        setLoading(false);
+        setLoading(false); // stop loader global
       }
     };
     fetchAllSongs();
   }, []);
-
-  if (loading) {
-    return <Loader />;
-  }
 
   return (
     <SongSection
