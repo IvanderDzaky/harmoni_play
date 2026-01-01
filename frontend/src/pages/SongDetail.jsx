@@ -37,6 +37,18 @@ export default function SongDetail() {
   const [commentText, setCommentText] = useState("");
   const [comments, setComments] = useState([]);
 
+  // Notifikasi stack
+  const [notifications, setNotifications] = useState([]);
+
+  // Fungsi untuk menampilkan notif
+  const showNotification = (message, type = "success") => {
+    const id = Date.now();
+    setNotifications(prev => [...prev, { id, message, type }]);
+    setTimeout(() => {
+      setNotifications(prev => prev.filter(n => n.id !== id));
+    }, 3000); // 3 detik hilang
+  };
+
   // Ambil data lagu + playlist user
   useEffect(() => {
     const fetchData = async () => {
@@ -81,7 +93,7 @@ export default function SongDetail() {
 
     const user = JSON.parse(localStorage.getItem("user"));
     if (!user) {
-      alert("User tidak ditemukan. Silakan login ulang.");
+      showNotification("User tidak ditemukan. Silakan login ulang.", "error");
       return;
     }
 
@@ -90,12 +102,13 @@ export default function SongDetail() {
       if (newComment) {
         setComments(prev => [...prev, newComment]);
         setCommentText("");
+        showNotification("💬 Komentar berhasil ditambahkan!");
       } else {
-        alert("Gagal menambahkan komentar");
+        showNotification("❌ Gagal menambahkan komentar", "error");
       }
     } catch (err) {
       console.error(err);
-      alert("Terjadi error saat menambahkan komentar");
+      showNotification("❌ Terjadi error saat menambahkan komentar", "error");
     }
   };
 
@@ -105,11 +118,12 @@ export default function SongDetail() {
   const handleAddToPlaylist = async (playlist_id) => {
     try {
       await addSongToPlaylist({ song_id: song.song_id, playlist_id });
-      alert("Lagu berhasil ditambahkan");
+      showNotification("🎵 Lagu berhasil ditambahkan!");
       closeModal();
       setPlaylists(prev => prev.filter(p => p.playlist_id !== playlist_id));
     } catch (err) {
-      alert("Gagal menambahkan lagu: " + err.message);
+      console.error(err);
+      showNotification("❌ Gagal menambahkan lagu", "error");
     }
   };
 
@@ -150,7 +164,6 @@ export default function SongDetail() {
           <div className="comments-section">
             <h3>Comments</h3>
 
-            {/* Form tambah komentar */}
             <div className="add-comment">
               <input
                 type="text"
@@ -161,7 +174,6 @@ export default function SongDetail() {
               <button onClick={handleAddComment}>Send</button>
             </div>
 
-            {/* Daftar komentar */}
             <div className="comments-list">
               {comments.length === 0 
                 ? <p>No comments yet.</p> 
@@ -180,12 +192,22 @@ export default function SongDetail() {
         )}
       </div>
 
+      {/* Playlist Modal */}
       <PlaylistModal
         isOpen={showModal}
         playlists={playlists}
         onClose={closeModal}
         onSelect={handleAddToPlaylist}
       />
+
+      {/* Notification Stack */}
+      <div className="notification-stack">
+        {notifications.map(n => (
+          <div key={n.id} className={`notification ${n.type}`}>
+            {n.message}
+          </div>
+        ))}
+      </div>
     </>
   );
 }

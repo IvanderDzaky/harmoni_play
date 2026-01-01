@@ -11,7 +11,24 @@ export const getAllUsers = async () => {
   return res.json();
 };
 
+export const deleteUser = async(id) => {
+  try{
+    const response = await fetch(`${BASE_URL}/users/${id}`,{
+      method: "DELETE",
+      headers: {
+        "Content-type" : "Application/json",
+        ...authHeader()
+      }
+    })
 
+    if (!response.ok) return []
+
+    return await response.json()
+  }catch(err){
+    console.log(err)
+    return []
+  }
+}
 export const getArtistRequests = async () => {
   const res = await fetch(`${BASE_URL}/artists/requests`, {
     headers: authHeader(),

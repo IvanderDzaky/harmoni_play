@@ -167,3 +167,56 @@
   margin: 0;
   color: #ddd;
 }
+
+
+/* ========================
+   Notification Stack
+   ======================== */
+.notification-stack {
+  position: fixed;
+  top: 20px;
+  right: 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  z-index: 3000;
+}
+
+.notification {
+  background: #1db954; /* default success */
+  color: #fff;
+  padding: 14px 22px;
+  border-radius: 12px;
+  font-weight: bold;
+  font-size: 15px;
+  box-shadow: 0 8px 25px rgba(0,0,0,0.5);
+  animation: slideIn 0.4s ease, fadeOut 0.5s ease 2.5s forwards;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+/* Error notif */
+.notification.error {
+  background: #e63946;
+}
+
+/* Animasi masuk */
+@keyframes slideIn {
+  from {
+    opacity: 0;
+    transform: translateX(50px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+/* Animasi keluar */
+@keyframes fadeOut {
+  to {
+    opacity: 0;
+    transform: translateX(50px);
+  }
+}
