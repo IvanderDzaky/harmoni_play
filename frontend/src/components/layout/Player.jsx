@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import { usePlayer } from "../../contexts/PlayerContext";
 import "../../styles/Player.css";
 
@@ -6,6 +6,7 @@ export default function Player() {
   const {
     audioRef,
     currentSong,
+    playlist,
     isPlaying,
     togglePlay,
     nextSong,
@@ -38,6 +39,13 @@ export default function Player() {
     if (audioRef.current) audioRef.current.volume = value;
   };
 
+  /* ================= NEXT SONG INFO ================= */
+  const currentIndex = playlist.findIndex((s) => s.song_id === currentSong.song_id);
+  const nextSongInfo =
+    playlist.length > 1
+      ? playlist[(currentIndex + 1) % playlist.length]
+      : null;
+
   return (
     <div className="player-container">
       <audio ref={audioRef} onTimeUpdate={handleTimeUpdate} onEnded={nextSong} />
@@ -48,6 +56,13 @@ export default function Player() {
         <div className="player-info">
           <h4>{currentSong.title}</h4>
           <p>{currentSong.artist_name || "Unknown Artist"}</p>
+
+          {/* NEXT SONG INFO */}
+          {nextSongInfo && (
+            <p className="player-next">
+              Next: {nextSongInfo.title} — {nextSongInfo.artist_name || "Unknown Artist"}
+            </p>
+          )}
         </div>
       </div>
 

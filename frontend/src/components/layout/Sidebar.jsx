@@ -67,12 +67,12 @@ export default function Sidebar() {
 
         {/* Library + tombol create playlist */}
         <div className="library-row">
-          <NavLink to="/library" className="menu-item library-link">
+          <div className="menu-item library-link no-hover">
             <div className="menu-icon">
               <FiBook size={18} />
             </div>
             <span className="menu-text">Your Library</span>
-          </NavLink>
+          </div>
 
           <button
             className="add-playlist-btn"

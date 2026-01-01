@@ -1,7 +1,7 @@
 /* ================= SIDEBAR ================= */
 .sidebar {
   width: 260px;
-  height: 100vh; /* full viewport height */
+  height: 100vh;
   background: #000;
   color: #fff;
   padding: 20px 14px;
@@ -22,7 +22,7 @@
 
 /* ================= HEADER ================= */
 .sidebar-header {
-  flex-shrink: 0; /* header tetap di atas */
+  flex-shrink: 0;
   margin-bottom: 24px;
 }
 
@@ -37,8 +37,8 @@
   display: flex;
   flex-direction: column;
   gap: 6px;
-  flex: 1; /* <--- Ambil sisa tinggi sidebar */
-  min-height: 0; /* penting agar anak flex bisa scroll */
+  flex: 1;
+  min-height: 0;
 }
 
 /* ITEM BERSAMA (Menu + Playlist) */
@@ -93,6 +93,16 @@
   gap: 10px;
 }
 
+/* ================= DISABLE HOVER UNTUK STATIC LIBRARY ================= */
+.no-hover {
+  cursor: default;
+}
+
+.no-hover:hover {
+  background: transparent;
+  color: #b3b3b3;
+}
+
 /* BUTTON ADD PLAYLIST */
 .add-playlist-btn {
   background: none;
@@ -114,15 +124,14 @@
 
 /* ================= PLAYLIST SECTION ================= */
 .playlist-section {
-  flex: 1;            /* ambil sisa tinggi menu */
-  min-height: 0;      /* <--- wajib */
+  flex: 1;
+  min-height: 0;
   overflow-y: auto;
   display: flex;
   flex-direction: column;
   gap: 6px;
   padding-right: 4px;
 
-  /* ================= HIDE SCROLLBAR ================= */
   scrollbar-width: none;      /* Firefox */
   -ms-overflow-style: none;   /* IE 10+ */
 }

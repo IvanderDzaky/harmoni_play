@@ -9,35 +9,36 @@ export function PlayerProvider({ children }) {
   const [currentSong, setCurrentSong] = useState(null);
   const [isPlaying, setIsPlaying] = useState(false);
 
+  /* ================= ADD TO PLAYLIST ================= */
+  const addToPlaylist = (song) => {
+    if (!playlist.find((s) => s.song_id === song.song_id)) {
+      setPlaylist((prev) => [...prev, song]);
+    }
+  };
+
   /* ================= PLAY SONG ================= */
   const playSong = (song) => {
     if (!song) return;
 
-    // klik lagu yang sama → toggle play
+    // klik lagu yang sama → toggle play/pause
     if (currentSong?.song_id === song.song_id) {
       togglePlay();
       return;
     }
 
+    // set lagu baru → otomatis play
     setCurrentSong(song);
-
-    // tambahkan ke playlist jika belum ada
-    setPlaylist((prev) =>
-      prev.find((s) => s.song_id === song.song_id)
-        ? prev
-        : [...prev, song]
-    );
-
     setIsPlaying(true);
+
+    // pastikan lagu juga ada di playlist
+    addToPlaylist(song);
   };
 
   /* ================= NEXT / PREV ================= */
   const nextSong = () => {
     if (!playlist.length || !currentSong) return;
 
-    const idx = playlist.findIndex(
-      (s) => s.song_id === currentSong.song_id
-    );
+    const idx = playlist.findIndex((s) => s.song_id === currentSong.song_id);
     const nextIdx = (idx + 1) % playlist.length;
 
     setCurrentSong(playlist[nextIdx]);
@@ -47,9 +48,7 @@ export function PlayerProvider({ children }) {
   const prevSong = () => {
     if (!playlist.length || !currentSong) return;
 
-    const idx = playlist.findIndex(
-      (s) => s.song_id === currentSong.song_id
-    );
+    const idx = playlist.findIndex((s) => s.song_id === currentSong.song_id);
     const prevIdx = (idx - 1 + playlist.length) % playlist.length;
 
     setCurrentSong(playlist[prevIdx]);
@@ -77,9 +76,7 @@ export function PlayerProvider({ children }) {
 
     if (isPlaying) {
       audio.play().catch((err) => {
-        if (err.name !== "AbortError") {
-          console.error(err);
-        }
+        if (err.name !== "AbortError") console.error(err);
       });
     } else {
       audio.pause();
@@ -94,9 +91,7 @@ export function PlayerProvider({ children }) {
     const handleEnded = () => nextSong();
     audio.addEventListener("ended", handleEnded);
 
-    return () => {
-      audio.removeEventListener("ended", handleEnded);
-    };
+    return () => audio.removeEventListener("ended", handleEnded);
   }, [playlist, currentSong]);
 
   /* ================= RESET PLAYER ================= */
@@ -123,6 +118,7 @@ export function PlayerProvider({ children }) {
         togglePlay,
         nextSong,
         prevSong,
+        addToPlaylist,
         setPlaylist,
         resetPlayer,
       }}
