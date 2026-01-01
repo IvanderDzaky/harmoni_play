@@ -1,0 +1,144 @@
+/* ================= OVERLAY ================= */
+.modal-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.7);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 999;
+}
+
+/* ================= MODAL ================= */
+.modal-content {
+  width: 100%;
+  max-width: 420px;
+  padding: 24px;
+  background: rgba(255, 255, 255, 0.06);
+  backdrop-filter: blur(10px);
+  border-radius: 14px;
+  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.5);
+  animation: fadeIn 0.25s ease-in-out;
+  color: #fff;
+}
+
+/* ================= TITLE ================= */
+.modal-content h2 {
+  margin-bottom: 18px;
+  font-size: 22px;
+  text-align: center;
+  border-bottom: 1px solid #555;
+  padding-bottom: 10px;
+}
+
+/* ================= FORM ================= */
+.modal-content form {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.modal-content label {
+  font-size: 14px;
+  color: #ccc;
+}
+
+/* ================= INPUT ================= */
+.modal-content input,
+.modal-content textarea {
+  padding: 10px 14px;
+  border-radius: 8px;
+  border: 1px solid #555;
+  background-color: #222;
+  color: #fff;
+  font-size: 14px;
+}
+
+.modal-content input::placeholder,
+.modal-content textarea::placeholder {
+  color: #aaa;
+}
+
+.modal-content textarea {
+  min-height: 80px;
+  resize: vertical;
+}
+
+.modal-content input:focus,
+.modal-content textarea:focus {
+  outline: none;
+  border-color: #1db954;
+}
+
+/* ================= MESSAGE ================= */
+.modal-message {
+  text-align: center;
+  font-size: 14px;
+  color: #1db954;
+}
+
+/* ================= BUTTONS ================= */
+.modal-buttons {
+  display: flex;
+  gap: 10px;
+  margin-top: 10px;
+}
+
+.modal-buttons button {
+  flex: 1;
+  padding: 10px 16px;
+  border-radius: 8px;
+  border: none;
+  font-size: 14px;
+  font-weight: bold;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+/* Submit */
+.modal-buttons button[type="submit"] {
+  background-color: #1db954;
+  color: #fff;
+}
+
+.modal-buttons button[type="submit"]:hover {
+  background-color: #1ed760;
+  transform: scale(1.05);
+}
+
+/* Cancel */
+.modal-buttons button[type="button"] {
+  background: rgba(255, 255, 255, 0.15);
+  color: #fff;
+}
+
+.modal-buttons button[type="button"]:hover {
+  background: rgba(255, 255, 255, 0.25);
+}
+
+/* Disabled */
+.modal-buttons button:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+  transform: none;
+}
+
+/* ================= ANIMATION ================= */
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: scale(0.95);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+/* ================= RESPONSIVE ================= */
+@media (max-width: 480px) {
+  .modal-content {
+    margin: 0 16px;
+    padding: 20px;
+  }
+}

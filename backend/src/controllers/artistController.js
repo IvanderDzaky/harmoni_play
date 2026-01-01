@@ -1,171 +1,164 @@
 import Artist from "../models/Artist.js";
+import { supabase } from "../config/supabase.js";
+import crypto from "crypto";
 
-// Helper: validasi URL
-const isURL = (str) => {
-  try {
-    new URL(str);
-    return true;
-  } catch {
-    return false;
-  }
-};
-
+// ================= GET =================
 export const getAllArtists = async (req, res) => {
   try {
     const artists = await Artist.findAll();
     res.json(artists);
-  } catch (error) {
-    res.status(500).json({ message: error.message });
+  } catch (err) {
+    res.status(500).json({ message: err.message });
   }
 };
 
 export const getArtistById = async (req, res) => {
-  try {
-    const id = req.params.id;
-
-    if (isNaN(id)) {
-      return res.status(400).json({ message: "Artist ID must be a number" });
-    }
-
-    const artist = await Artist.findByPk(id);
-
-    if (!artist) {
-      return res.status(404).json({ message: "Artist not found" });
-    }
-
-    res.json(artist);
-  } catch (error) {
-    res.status(500).json({ message: error.message });
-  }
+  const artist = await Artist.findByPk(req.params.id);
+  if (!artist) return res.status(404).json({ message: "Artist not found" });
+  res.json(artist);
 };
 
+// ================= CREATE (ADMIN) =================
 export const createArtist = async (req, res) => {
   try {
-    const { name, bio, photo, user_id, verified } = req.body;
+    const { name, bio, user_id, verified } = req.body;
+    const file = req.file;
 
-    // ===== VALIDATION RULES =====
-    if (!name || name.length < 2) {
-      return res.status(400).json({
-        message: "Artist name is required and must be at least 2 characters.",
-      });
-    }
+    if (!name || name.length < 2)
+      return res.status(400).json({ message: "Nama artist minimal 2 karakter" });
 
-    if (bio && bio.length < 5) {
-      return res.status(400).json({
-        message: "Bio must be at least 5 characters.",
-      });
-    }
+    let photo = null;
 
-    if (photo && !isURL(photo)) {
-      return res.status(400).json({
-        message: "Photo must be a valid URL.",
-      });
-    }
+    if (file) {
+      const ext = file.originalname.split(".").pop();
+      const filename = `${crypto.randomUUID()}.${ext}`;
+      photo = `photos/${filename}`;
 
-    if (user_id && isNaN(user_id)) {
-      return res.status(400).json({
-        message: "user_id must be a number.",
-      });
-    }
+      const { error } = await supabase.storage
+        .from("Artist")
+        .upload(photo, file.buffer, {
+          contentType: file.mimetype,
+        });
 
-    if (verified && typeof verified !== "boolean") {
-      return res.status(400).json({
-        message: "verified must be a boolean.",
-      });
+      if (error) throw error;
     }
 
     const artist = await Artist.create({
       name,
       bio,
-      photo,
       user_id,
       verified,
+      photo,
+    });
+
+    res.status(201).json({ message: "Artist created", artist });
+  } catch (err) {
+    res.status(500).json({ message: err.message });
+  }
+};
+
+// ================= UPDATE =================
+export const updateArtist = async (req, res) => {
+  try {
+    const artist = await Artist.findByPk(req.params.id);
+    if (!artist) return res.status(404).json({ message: "Artist not found" });
+
+    const file = req.file;
+    let photo = artist.photo;
+
+    if (file) {
+      // hapus foto lama
+      if (artist.photo) {
+        await supabase.storage.from("Artist").remove([artist.photo]);
+      }
+
+      const ext = file.originalname.split(".").pop();
+      const filename = `${crypto.randomUUID()}.${ext}`;
+      photo = `photos/${filename}`;
+
+      const { error } = await supabase.storage
+        .from("Artist")
+        .upload(photo, file.buffer, {
+          contentType: file.mimetype,
+        });
+
+      if (error) throw error;
+    }
+
+    await artist.update({ ...req.body, photo });
+    res.json({ message: "Artist updated", artist });
+  } catch (err) {
+    res.status(500).json({ message: err.message });
+  }
+};
+
+// ================= DELETE =================
+export const deleteArtist = async (req, res) => {
+  const artist = await Artist.findByPk(req.params.id);
+  if (!artist) return res.status(404).json({ message: "Artist not found" });
+
+  if (artist.photo) {
+    await supabase.storage.from("Artist").remove([artist.photo]);
+  }
+
+  await artist.destroy();
+  res.json({ message: "Artist deleted" });
+};
+
+// ================= AJUKAN MUSISI =================
+export const ajukanMusisi = async (req, res) => {
+  try {
+    const { name, bio } = req.body;
+    const user_id = req.user.user_id;
+    const file = req.file;
+
+    const existing = await Artist.findOne({ where: { user_id } });
+    if (existing)
+      return res.status(400).json({ message: "Sudah mengajukan musisi" });
+
+    let photo = null;
+
+    if (file) {
+      const ext = file.originalname.split(".").pop();
+      const filename = `${crypto.randomUUID()}.${ext}`;
+      photo = `photos/${filename}`;
+
+      const { error } = await supabase.storage
+        .from("Artist")
+        .upload(photo, file.buffer, {
+          contentType: file.mimetype,
+        });
+
+      if (error) throw error;
+    }
+
+    const artist = await Artist.create({
+      name,
+      bio,
+      user_id,
+      photo,
+      verified: false,
     });
 
     res.status(201).json({
-      message: "Artist created successfully",
-      data: artist,
+      message: "Pengajuan berhasil, tunggu verifikasi admin",
+      artist,
     });
-  } catch (error) {
-    res.status(500).json({ message: error.message });
+  } catch (err) {
+    res.status(500).json({ message: err.message });
   }
 };
 
-export const updateArtist = async (req, res) => {
-  try {
-    const id = req.params.id;
+// ================= VERIFY =================
+export const verifyArtist = async (req, res) => {
+  if (req.user.role !== "admin")
+    return res.status(403).json({ message: "Admin only" });
 
-    if (isNaN(id)) {
-      return res.status(400).json({ message: "Artist ID must be a number" });
-    }
+  const artist = await Artist.findByPk(req.params.artist_id);
+  if (!artist) return res.status(404).json({ message: "Artist not found" });
 
-    const artist = await Artist.findByPk(id);
-    if (!artist) {
-      return res.status(404).json({ message: "Artist not found" });
-    }
+  artist.verified = req.body.verified;
+  await artist.save();
 
-    const { name, bio, photo, user_id, verified } = req.body;
-
-    // ===== PARTIAL VALIDATION =====
-    if (name && name.length < 2) {
-      return res.status(400).json({
-        message: "Artist name must be at least 2 characters.",
-      });
-    }
-
-    if (bio && bio.length < 5) {
-      return res.status(400).json({
-        message: "Bio must be at least 5 characters.",
-      });
-    }
-
-    if (photo && !isURL(photo)) {
-      return res.status(400).json({
-        message: "Photo must be a valid URL.",
-      });
-    }
-
-    if (user_id && isNaN(user_id)) {
-      return res.status(400).json({
-        message: "user_id must be a number.",
-      });
-    }
-
-    if (verified !== undefined && typeof verified !== "boolean") {
-      return res.status(400).json({
-        message: "verified must be a boolean.",
-      });
-    }
-
-    await artist.update(req.body);
-
-    res.json({
-      message: "Artist updated successfully",
-      data: artist,
-    });
-  } catch (error) {
-    res.status(400).json({ message: error.message });
-  }
-};
-
-export const deleteArtist = async (req, res) => {
-  try {
-    const id = req.params.id;
-
-    if (isNaN(id)) {
-      return res.status(400).json({ message: "Artist ID must be a number" });
-    }
-
-    const artist = await Artist.findByPk(id);
-
-    if (!artist) {
-      return res.status(404).json({ message: "Artist not found" });
-    }
-
-    await artist.destroy();
-
-    res.json({ message: "Artist deleted successfully" });
-  } catch (error) {
-    res.status(500).json({ message: error.message });
-  }
+  res.json({ message: "Verification updated", artist });
 };

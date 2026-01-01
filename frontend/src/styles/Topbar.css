@@ -1,9 +1,10 @@
-/* ====== TOPBAR WRAPPER ====== */
+/* ================= TOPBAR ================= */
 .topbar {
   height: 60px;
   width: 100%;
-  background: #121212;                /* Warna Spotify Dark */
-  border-bottom: 1px solid #2a2a2a;   /* Garis tipis */
+  background: rgba(18, 18, 18, 0.95);
+  backdrop-filter: blur(6px);
+  border-bottom: 1px solid #2a2a2a;
   display: flex;
   align-items: center;
   justify-content: space-between;
@@ -13,10 +14,9 @@
   z-index: 10;
 }
 
-/* ====== LEFT SECTION (Back & Forward) ====== */
+/* ================= LEFT ================= */
 .topbar-left {
   display: flex;
-  align-items: center;
   gap: 10px;
 }
 
@@ -26,64 +26,97 @@
   border-radius: 50%;
   border: none;
   background: #181818;
-  color: white;
+  color: #fff;
   font-size: 18px;
   cursor: pointer;
-
   display: flex;
   align-items: center;
   justify-content: center;
-
-  transition: background 0.2s;
+  transition: background 0.2s ease, transform 0.15s ease;
 }
 
 .nav-btn:hover {
   background: #2b2b2b;
+  transform: scale(1.05);
 }
 
-/* ====== RIGHT SECTION ====== */
+/* ================= RIGHT ================= */
 .topbar-right {
   display: flex;
   align-items: center;
   gap: 15px;
 }
 
-/* ====== SEARCH BOX ====== */
+/* ================= SEARCH ================= */
 .topbar-search {
-  background: #2a2a2a;
-  border: none;
-  outline: none;
-  padding: 8px 14px;
   width: 240px;
-
+  padding: 8px 14px;
   border-radius: 20px;
-  color: white;
+  border: 1px solid #333;
+  background: #222;
+  color: #fff;
   font-size: 14px;
+}
 
-  transition: background 0.2s;
+.topbar-search::placeholder {
+  color: #aaa;
 }
 
 .topbar-search:focus {
-  background: #3a3a3a;
+  outline: none;
+  border-color: #1db954;
 }
 
-/* ====== PROFILE ICON ====== */
-.topbar-profile {
-  width: 34px;
-  height: 34px;
-  background: #535353;
-  border-radius: 50%;
+/* ================= DROPDOWN ================= */
+.dropdown-toggle {
   display: flex;
   align-items: center;
-  justify-content: center;
-
-  color: white;
-  font-weight: 600;
+  gap: 8px;
+  background: rgba(255, 255, 255, 0.1);
+  border: 1px solid #444;
+  border-radius: 999px;
+  padding: 6px 12px;
+  color: #fff;
   cursor: pointer;
-
-  transition: background 0.2s;
 }
 
-.topbar-profile:hover {
-  background: #6a6a6a;
+.dropdown-arrow {
+  transition: transform 0.2s ease;
+}
+
+.dropdown-arrow.open {
+  transform: rotate(180deg);
+}
+
+/* ================= DROPDOWN MENU ================= */
+.dropdown-menu {
+  min-width: 160px;
+  background: rgba(30, 30, 30, 0.96);
+  backdrop-filter: blur(6px);
+  border-radius: 10px;
+  border: 1px solid #333;
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.6);
+  overflow: hidden;
+}
+
+.dropdown-item {
+  width: 100%;
+  padding: 10px 14px;
+  background: none;
+  border: none;
+  text-align: left;
+  font-size: 14px;
+  color: #ddd;
+  cursor: pointer;
+  transition: background 0.2s ease, color 0.2s ease;
+}
+
+.dropdown-item:hover {
+  background: rgba(255, 255, 255, 0.1);
+  color: #1db954;
+}
+
+/* ================= AVATAR ================= */
+.avatar-icon {
+  fill: #fff;
 }
