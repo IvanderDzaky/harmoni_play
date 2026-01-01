@@ -1,45 +1,50 @@
+/* ================= ADMIN SIDEBAR ================= */
 .admin-sidebar {
-  width: 260px;
-  min-height: 100vh;
-  background: linear-gradient(180deg, #0f0f0f, #141414);
-  padding: 28px 20px;
-  display: flex;
-  flex-direction: column;
-  gap: 14px;
+  background: #0f0f0f;
   border-right: 1px solid #222;
 }
 
-.admin-title {
-  font-size: 22px;
+/* HEADER */
+.admin-sidebar .sidebar-header {
+  margin-bottom: 20px;
+}
+
+.admin-sidebar .sidebar-title {
+  font-size: 20px;
   font-weight: 700;
   color: #fff;
-  margin-bottom: 24px;
   letter-spacing: 0.5px;
 }
 
-.admin-sidebar button {
-  background: transparent;
-  border: none;
-  color: #cfcfcf;
-  padding: 14px 16px;
-  border-radius: 10px;
-  text-align: left;
-  cursor: pointer;
-  font-size: 15px;
-  display: flex;
-  align-items: center;
-  gap: 12px;
-  transition: all 0.25s ease;
+/* MENU ITEM */
+.admin-sidebar .menu-item {
+  padding: 10px 8px;
+  border-radius: 8px;
 }
 
-.admin-sidebar button:hover {
-  background: #1c1c1c;
-  color: #fff;
-  transform: translateX(4px);
+/* ICON */
+.admin-sidebar .menu-icon {
+  background: #1e1e1e;
 }
 
-.admin-sidebar button.active {
-  background: linear-gradient(135deg, #1db954, #1ed760);
+/* TEXT */
+.admin-sidebar .menu-text {
+  font-size: 14px;
+  font-weight: 600;
+}
+
+/* HOVER */
+.admin-sidebar .menu-item:hover {
+  background: #1a1a1a;
+}
+
+/* ACTIVE */
+.admin-sidebar .menu-item.active {
+  background: #1db954;
   color: #000;
-  font-weight: 700;
+}
+
+.admin-sidebar .menu-item.active .menu-icon {
+  background: rgba(0, 0, 0, 0.2);
+  color: #000;
 }

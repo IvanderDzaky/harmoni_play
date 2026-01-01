@@ -1,51 +1,107 @@
-.admin-page h1 {
-  font-size: 28px;
-  margin-bottom: 24px;
+/* =========================
+   User Management Styling
+   ========================= */
+
+.user-management {
+  color: white;
+  background: linear-gradient(to bottom, #121212, #1e1e1e);
+  padding: 30px;
+  min-height: 100vh;
+  font-family: 'Segoe UI', sans-serif;
 }
 
-.admin-table {
-  width: 100%;
-  border-collapse: collapse;
-  background: #121212;
+/* ===== Header ===== */
+.user-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  background: rgba(255,255,255,0.05);
+  padding: 20px;
   border-radius: 12px;
-  overflow: hidden;
+  margin-bottom: 30px;
+  box-shadow: 0 4px 20px rgba(0,0,0,0.5);
 }
 
-.admin-table th {
-  background: #1b1b1b;
-  text-align: left;
-  padding: 14px;
+.user-header h1 {
+  font-size: 32px;
+  margin: 0;
+}
+
+.user-header p {
+  margin-top: 6px;
+  color: #b0b0b0;
+}
+
+.user-count {
   font-size: 14px;
+  color: #ccc;
+}
+
+.user-count span {
+  color: #1db954;
+  font-weight: bold;
+}
+
+/* ===== User List ===== */
+.user-list {
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+}
+
+/* ===== User Card ===== */
+.user-card {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background: rgba(255,255,255,0.05);
+  padding: 18px 22px;
+  border-radius: 12px;
+  box-shadow: 0 4px 15px rgba(0,0,0,0.5);
+  transition: transform 0.2s ease, background 0.2s ease;
+}
+
+.user-card:hover {
+  background: rgba(255,255,255,0.08);
+  transform: translateY(-2px);
+}
+
+/* ===== User Info ===== */
+.user-info h3 {
+  margin: 0;
+  font-size: 18px;
+}
+
+.user-info p {
+  margin: 6px 0 0;
   color: #aaa;
+  font-size: 14px;
 }
 
-.admin-table td {
-  padding: 14px;
-  border-bottom: 1px solid #222;
-  font-size: 15px;
-}
-
-.admin-table tr:hover {
-  background: #1c1c1c;
-}
-
-.role {
-  padding: 6px 12px;
+/* ===== Role Badge ===== */
+.role-badge {
+  padding: 6px 14px;
   border-radius: 20px;
   font-size: 13px;
-  font-weight: 600;
-  display: inline-block;
+  font-weight: bold;
+  text-transform: capitalize;
 }
 
-.role.admin {
-  background: #1db954;
-  color: #000;
+/* role colors */
+.role-badge.admin {
+  background: rgba(255, 99, 71, 0.2);
+  color: tomato;
 }
 
-.role.artist {
-  background: #3b82f6;
+.role-badge.user {
+  background: rgba(29, 185, 84, 0.2);
+  color: #1db954;
 }
 
-.role.reguler {
-  background: #555;
+/* ===== Empty ===== */
+.empty {
+  text-align: center;
+  color: #aaa;
+  margin-top: 40px;
 }

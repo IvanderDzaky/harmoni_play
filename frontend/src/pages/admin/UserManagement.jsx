@@ -1,34 +1,65 @@
 import { useEffect, useState } from "react";
 import { getAllUsers } from "../../services/adminService";
+import Loader from "../../components/layout/Loader";
 import "../../styles/UserManagement.css";
+import "../../styles/loader.css";
 
 export default function UserManagement() {
   const [users, setUsers] = useState([]);
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    getAllUsers().then(setUsers);
+    const fetchUsers = async () => {
+      try {
+        const data = await getAllUsers();
+        setUsers(data || []);
+      } catch (err) {
+        console.error(err);
+        setUsers([]);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchUsers();
   }, []);
 
-  return (
-        <div className="admin-page">
-            <h1>User Management</h1>
+  if (loading) {
+    return (
+      <div className="loader-overlay">
+        <Loader />
+      </div>
+    );
+  }
 
-            <table className="admin-table">
-              <thead>...</thead>
-              <tbody>
-                {users.map((u) => (
-                  <tr key={u.user_id}>
-                    <td>{u.username}</td>
-                    <td>{u.email}</td>
-                    <td>
-                      <span className={`role ${u.role}`}>
-                        {u.role}
-                      </span>
-                    </td>
-                  </tr>
-                ))}
-              </tbody>
-            </table>
-          </div>
+  return (
+    <div className="user-management">
+      {/* HEADER */}
+      <div className="user-header">
+        <div className="user-count">
+          Total Users: <span>{users.length}</span>
+        </div>
+      </div>
+
+      {/* LIST */}
+      <div className="user-list">
+        {users.length === 0 ? (
+          <p className="empty">No users found</p>
+        ) : (
+          users.map((u) => (
+            <div className="user-card" key={u.user_id}>
+              <div className="user-info">
+                <h3>{u.name}</h3>
+                <p>{u.email}</p>
+              </div>
+
+              <span className={`role-badge ${u.role}`}>
+                {u.role}
+              </span>
+            </div>
+          ))
+        )}
+      </div>
+    </div>
   );
 }

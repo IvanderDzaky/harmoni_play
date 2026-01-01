@@ -14,8 +14,11 @@ import SongDetail from "./pages/SongDetail";
 import PlaylistDetail from "./components/layout/PlaylistDetail";
 
 // ADMIN PAGE
-import AdminRoute from "./routes/AdminRoute";
 import AdminDashboard from "./pages/admin/AdminDashboard";
+import AdminDashboardLayout from "./components/admin/AdminDashboardLayout";
+import UserManagement from "./pages/admin/UserManagement";
+import ArtistVerification from "./pages/admin/ArtistVerification";
+
 
 // ROUTES & LAYOUT
 import ProtectedRoute from "./routes/ProtectedRoute";
@@ -60,9 +63,11 @@ function App() {
         </Route>
 
         {/* ADMIN ROUTE (ADMIN ONLY) */}
-        <Route element={<AdminRoute />}>
-          <Route path="/admin" element={<AdminDashboard />} />
-        </Route>
+          <Route element={<AdminDashboardLayout />}>
+            <Route path="/admin" element={<AdminDashboard />} />
+            <Route path="/admin/users" element={<UserManagement />} />
+            <Route path="/admin/artists" element={<ArtistVerification />} />
+          </Route>
 
         {/* FALLBACK */}
         <Route path="*" element={<Navigate to="/login" replace />} />
