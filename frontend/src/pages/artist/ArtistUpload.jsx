@@ -16,6 +16,8 @@ export default function ArtistUpload() {
   const [categories, setCategories] = useState([]);
   const [loading, setLoading] = useState(false);
   const [message, setMessage] = useState("");
+  const [messageType, setMessageType] = useState(""); // 'error' atau 'success'
+  const [isDragging, setIsDragging] = useState(false);
 
   const coverInputRef = useRef();
 
@@ -23,36 +25,54 @@ export default function ArtistUpload() {
     getAllCategories().then((data) => setCategories(data));
   }, []);
 
+  // Cleanup object URL untuk audio preview
+  useEffect(() => {
+    return () => {
+      if (audioPreview) URL.revokeObjectURL(audioPreview);
+    };
+  }, [audioPreview]);
+
   const handleGenreChange = (e) => {
     const selected = Array.from(e.target.selectedOptions, (option) => option.value);
     setSelectedGenres(selected);
   };
 
   const handleCoverChange = (file) => {
-    setCoverImage(file);
-    if (file) {
-      const reader = new FileReader();
-      reader.onload = () => setCoverPreview(reader.result);
-      reader.readAsDataURL(file);
-    } else {
+    if (!file) {
+      setCoverImage(null);
       setCoverPreview(null);
+      return;
     }
+    if (!file.type.startsWith("image/")) {
+      setMessage("File harus berupa gambar!");
+      setMessageType("error");
+      return;
+    }
+    setCoverImage(file);
+    const reader = new FileReader();
+    reader.onload = () => setCoverPreview(reader.result);
+    reader.readAsDataURL(file);
   };
 
   const handleCoverDrop = (e) => {
     e.preventDefault();
     const file = e.dataTransfer.files[0];
     handleCoverChange(file);
+    setIsDragging(false);
   };
 
   const handleAudioChange = (e) => {
     const file = e.target.files[0];
+    if (!file) return;
     setAudioFile(file);
-    setAudioPreview(file ? URL.createObjectURL(file) : null);
+    setAudioPreview(URL.createObjectURL(file));
   };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    setMessage("");
+    setMessageType("");
+
     if (!audioFile) return setMessage("Audio file wajib diisi!");
     if (selectedGenres.length === 0) return setMessage("Pilih minimal 1 genre!");
 
@@ -84,26 +104,13 @@ export default function ArtistUpload() {
     if (coverImage) formData.append("cover_image", coverImage);
     formData.append("artist_id", artist_id);
     formData.append("uploaded_by", user.user_id);
-
-    // Append genres dengan format backend friendly
     selectedGenres.forEach((g) => formData.append("genres[]", g));
 
-    console.log("FormData siap dikirim:", {
-      title,
-      lyrics,
-      audioFile,
-      coverImage,
-      artist_id,
-      uploaded_by: user.user_id,
-      genres: selectedGenres,
-    });
-
     setLoading(true);
-    setMessage("");
-
     try {
       await uploadSong(formData);
       setMessage("Lagu berhasil diunggah!");
+      setMessageType("success");
 
       // Reset form
       setTitle("");
@@ -116,6 +123,7 @@ export default function ArtistUpload() {
     } catch (err) {
       console.error(err);
       setMessage(err.response?.data?.message || err.message || "Gagal mengunggah lagu.");
+      setMessageType("error");
     } finally {
       setLoading(false);
     }
@@ -123,16 +131,20 @@ export default function ArtistUpload() {
 
   return (
     <div className="artist-upload-page">
-      {loading && <Loader />}
+      {loading && <div className="loader-overlay"><Loader /></div>}
 
       <h2>Unggah Lagu Baru</h2>
-      {message && <p className="message">{message}</p>}
+      {message && <p className={`message ${messageType}`}>{message}</p>}
 
-      {/* Cover Preview */}
-      {coverPreview && <img src={coverPreview} alt="Cover Preview" className="preview-cover-large" />}
+      {coverPreview && (
+        <img
+          src={coverPreview}
+          alt="Cover Preview"
+          className="preview-cover-large fade-in"
+        />
+      )}
 
       <form onSubmit={handleSubmit} className="upload-form">
-        {/* Judul Lagu */}
         <input
           type="text"
           placeholder="Judul Lagu"
@@ -141,16 +153,19 @@ export default function ArtistUpload() {
           required
         />
 
-        {/* Lirik Lagu */}
         <textarea
           placeholder="Lirik Lagu"
           value={lyrics}
           onChange={(e) => setLyrics(e.target.value)}
         />
 
-        {/* Genre */}
         <label>Genre</label>
-        <select multiple value={selectedGenres} onChange={handleGenreChange}>
+        <select
+          key={selectedGenres.join(",")}
+          multiple
+          value={selectedGenres}
+          onChange={handleGenreChange}
+        >
           {categories.map((c) => (
             <option key={c.genre_id} value={c.genre_id}>
               {c.name}
@@ -158,18 +173,17 @@ export default function ArtistUpload() {
           ))}
         </select>
 
-        {/* Audio */}
         <label>Audio</label>
         <input type="file" accept="audio/*" onChange={handleAudioChange} required />
         {audioPreview && <audio controls src={audioPreview} className="preview-audio" />}
 
-        {/* Cover Drag & Drop */}
         <label>Cover Image (Opsional)</label>
         <div
-          className="cover-drop-zone"
+          className={`cover-drop-zone ${isDragging ? "drag-over" : ""}`}
           onClick={() => coverInputRef.current.click()}
           onDrop={handleCoverDrop}
-          onDragOver={(e) => e.preventDefault()}
+          onDragOver={(e) => { e.preventDefault(); setIsDragging(true); }}
+          onDragLeave={() => setIsDragging(false)}
         >
           {coverPreview ? "Klik atau Drop untuk ganti cover" : "Klik atau Drop file cover di sini"}
         </div>
